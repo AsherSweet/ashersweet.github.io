@@ -2,7 +2,7 @@
 
 <img src="https://octodex.github.com/images/Professortocat_v2.png" align="right" height="200px" />
 
-# SSP Objectives
+# Hey! Welcome to our SSP Project. Here's what we need to do...
 ## BETTER SLEEP
 ### Research
 
