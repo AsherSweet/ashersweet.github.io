@@ -1,19 +1,21 @@
-# GitHub Pages
+# DoHabit | Habit Tracker
 
-<img src="https://octodex.github.com/images/Professortocat_v2.png" align="right" height="200px" />
+![Screens](https://github.com/iNikAnn/DoHabit/blob/main/public/img/Repo-Card-Template.jpg)
 
-# Hey! Welcome to our SSP Project for Better Sleep. Here's what we need to do...
-## Research
+DoHabit is a straightforward habit tracker that doesn’t require registration. Easily mark your completed days, track your progress, and keep a journal for each habit.
 
-## Sleep Diary - website & app
+## 🗃️ Features
 
-## Infographic - printout
+- No registration required
+- Mark completed days
+- Track your progress
+- Maintain a journal for each habit
+- Achievements to motivate and celebrate your progress
 
-## Workshop Delivery
+## 📲 Usage
 
-[![](https://img.shields.io/badge/Go%20to%20Exercise-%E2%86%92-1f883d?style=for-the-badge&logo=github&labelColor=197935)](https://github.com/AsherSweet/ashersweet.github.io/issues/1)
+DoHabit is a Progressive Web App (PWA). To use it, simply visit the [website](https://inikann.github.io/DoHabit/) and click on "Install" in the notification that appears. If the notification does not show up, you can also add it to your Home Screen through the browser menu.
 
----
+## ⚖️ License
 
-&copy; 2025 GitHub &bull; [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md) &bull; [MIT License](https://gh.io/mit)
-
+This project is licensed under the MIT License. See the [LICENSE](LICENSE.txt) file in the root directory for details.
