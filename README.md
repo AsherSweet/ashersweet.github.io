@@ -2,23 +2,14 @@
 
 <img src="https://octodex.github.com/images/Professortocat_v2.png" align="right" height="200px" />
 
-# Hey! Welcome to our SSP Project. Here's what we need to do...
-## BETTER SLEEP
-### Research
+# Hey! Welcome to our SSP Project for Better Sleep. Here's what we need to do...
+## Research
 
-### Sleep Diary - website & app
+## Sleep Diary - website & app
 
-### Infographic - printout
+## Infographic - printout
 
-### Workshop Delivery
-
-## FOOD FOR THE BRAIN
-### Research
-
-### App
-
-### Infographic
-
+## Workshop Delivery
 
 [![](https://img.shields.io/badge/Go%20to%20Exercise-%E2%86%92-1f883d?style=for-the-badge&logo=github&labelColor=197935)](https://github.com/AsherSweet/ashersweet.github.io/issues/1)
 
