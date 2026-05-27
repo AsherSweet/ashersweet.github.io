@@ -46,6 +46,23 @@
 
 		</div>
 
+    <div class="text-center mt-4">
+      <button id="log-btn" onclick="handleLog()" class="log-btn">
+        <i class="fas fa-plus-circle me-2"></i>Log Activity
+      </button>
+      <p id="log-feedback" class="log-feedback"></p>
+    </div>
+
+    <div id="log-section" style="display:none;" class="log-section mt-3">
+      <h6 class="log-title">Activity Log</h6>
+      <table class="log-table w-100">
+        <thead>
+          <tr><th>#</th><th>Activity</th><th>Time</th></tr>
+        </thead>
+        <tbody id="log-body"></tbody>
+      </table>
+    </div>
+
 	</fieldset>
 	</div>
     <nav>

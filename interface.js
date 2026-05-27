@@ -1,3 +1,17 @@
+function handleLog() {
+  const selected = document.querySelector('.radioBtn:checked');
+  const feedback = document.getElementById('log-feedback');
+  if (!selected) {
+    feedback.textContent = "Please select an activity first.";
+    feedback.style.color = "#e07070";
+    return;
+  }
+  activityLog(selected.value, new Date().toLocaleString());
+  feedback.textContent = `"${selected.value}" logged!`;
+  feedback.style.color = "var(--accent-color)";
+  setTimeout(() => feedback.textContent = "", 2000);
+}
+
 const contents = document.querySelectorAll(".content");
 const listItems = document.querySelectorAll("nav ul li");
 
