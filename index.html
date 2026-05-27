@@ -1,91 +1,135 @@
 <head>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-<script src="interface.js"></script>
-<script src="database.js"></script>
+<script src="database.js" defer></script>
+<script src="interface.js" defer></script>
 <link rel="stylesheet" href="main.css" />
 </head>
 <body>
 
-</div>
-  <div class="phone-screen">
-	<div class="container mt-5">
-	<div class="col-lg-8 offset-lg-2">
-		<h1 class="fs-3 fw-light" style="text-align: center;">Radio Buttons</h1>
-	<fieldset>
-		<div class="row g-4 mt-3">
-			<div class="col-6 col-md-4">
-			  <input class="radioBtn" id="radio-stumptown" name="group" type="radio" value="Stumptown" />
-			  <label for="radio-stumptown"><div class="toggle-icon fa fa-check"></div><img src="https://i.ibb.co/KLWNg71/cog.png" class="img-fluid my-2 ml-23 mh-55" border="0"><p class="mb-2">STUMPTOWN</p></label>
-			</div>
+  <!-- PAGE 1: HOME - Radio Buttons -->
+  <div class="content show" id="page-home">
+    <div class="page-inner container mt-5">
+      <h1 class="page-title">Activities</h1>
+      <fieldset>
+        <div class="row g-4 mt-3">
 
-			<div class="col-6 col-md-4">
-			  <input class="radioBtn" id="radio-humblebrag" name="group" type="radio" value="Humblebrag" />
-			  <label for="radio-humblebrag"><div class="toggle-icon fa fa-check"></div><img src="https://i.ibb.co/N6QCb8f/magnify.png" class="img-fluid my-2 ml-23 mh-55" border="0"><p class="mb-2">HUMBLEBRAG</p></label>
-			</div>
+          <div class="col-6 col-md-4">
+            <input class="radioBtn" id="radio-stumptown" name="group" type="radio" value="Stumptown" />
+            <label for="radio-stumptown"><div class="toggle-icon fa fa-check"></div><img src="https://i.ibb.co/KLWNg71/cog.png" class="img-fluid my-2 ml-23 mh-55" border="0"><p class="mb-2">STUMPTOWN</p></label>
+          </div>
 
-			<div class="col-6 col-md-4">
-			  <input class="radioBtn" id="radio-jeans" name="group" type="radio" value="Jeans Shorts" />
-			  <label for="radio-jeans"><div class="toggle-icon fa fa-check"></div><img src="https://i.ibb.co/JjBjcBc/house.png" class="img-fluid my-2 ml-23 mh-55" border="0"><p class="mb-2">JEANS SHORTS</p></label>
-			</div>
+          <div class="col-6 col-md-4">
+            <input class="radioBtn" id="radio-humblebrag" name="group" type="radio" value="Humblebrag" />
+            <label for="radio-humblebrag"><div class="toggle-icon fa fa-check"></div><img src="https://i.ibb.co/N6QCb8f/magnify.png" class="img-fluid my-2 ml-23 mh-55" border="0"><p class="mb-2">HUMBLEBRAG</p></label>
+          </div>
 
-			<div class="col-6 col-md-4 mt-4">
-			  <input class="radioBtn" id="radio-hammock" name="group" type="radio" value="Hammock" />
-			  <label for="radio-hammock"><div class="toggle-icon fa fa-check"></div><img src="https://i.ibb.co/FD668kn/beaker.png" class="img-fluid my-2 ml-23 mh-55" border="0"><p class="mb-2">HAMMOCK</p></label>
-			</div>
+          <div class="col-6 col-md-4">
+            <input class="radioBtn" id="radio-jeans" name="group" type="radio" value="Jeans Shorts" />
+            <label for="radio-jeans"><div class="toggle-icon fa fa-check"></div><img src="https://i.ibb.co/JjBjcBc/house.png" class="img-fluid my-2 ml-23 mh-55" border="0"><p class="mb-2">JEANS SHORTS</p></label>
+          </div>
 
-			<div class="col-6 col-md-4 mt-4">
-			  <input class="radioBtn" id="radio-chicharrones" name="group" type="radio" value="Chicharrones" />
-			  <label for="radio-chicharrones"><div class="toggle-icon fa fa-check"></div><img src="https://i.ibb.co/PDbFtRD/boat.png" class="img-fluid my-2 ml-23 mh-55" border="0"><p class="mb-2">CHICHARRONES</p></label>
-			</div>
+          <div class="col-6 col-md-4 mt-4">
+            <input class="radioBtn" id="radio-hammock" name="group" type="radio" value="Hammock" />
+            <label for="radio-hammock"><div class="toggle-icon fa fa-check"></div><img src="https://i.ibb.co/FD668kn/beaker.png" class="img-fluid my-2 ml-23 mh-55" border="0"><p class="mb-2">HAMMOCK</p></label>
+          </div>
 
-			<div class="col-6 col-md-4 mt-4">
-			  <input class="radioBtn" id="radio-dreamcatcher" name="group" type="radio" value="Dreamcatcher" />
-			  <label for="radio-dreamcatcher"><div class="toggle-icon fa fa-check"></div><img src="https://i.ibb.co/JCGBzGd/jug.png" class="img-fluid my-2 ml-23 mh-55" border="0"><p class="mb-2">DREAMCATCHER</p></label>
-			</div>
+          <div class="col-6 col-md-4 mt-4">
+            <input class="radioBtn" id="radio-chicharrones" name="group" type="radio" value="Chicharrones" />
+            <label for="radio-chicharrones"><div class="toggle-icon fa fa-check"></div><img src="https://i.ibb.co/PDbFtRD/boat.png" class="img-fluid my-2 ml-23 mh-55" border="0"><p class="mb-2">CHICHARRONES</p></label>
+          </div>
 
-		</div>
+          <div class="col-6 col-md-4 mt-4">
+            <input class="radioBtn" id="radio-dreamcatcher" name="group" type="radio" value="Dreamcatcher" />
+            <label for="radio-dreamcatcher"><div class="toggle-icon fa fa-check"></div><img src="https://i.ibb.co/JCGBzGd/jug.png" class="img-fluid my-2 ml-23 mh-55" border="0"><p class="mb-2">DREAMCATCHER</p></label>
+          </div>
 
-    <div class="text-center mt-4">
-      <button id="log-btn" onclick="handleLog()" class="log-btn">
-        <i class="fas fa-plus-circle me-2"></i>Log Activity
-      </button>
-      <p id="log-feedback" class="log-feedback"></p>
+        </div>
+      </fieldset>
+
+      <div class="text-center mt-4">
+        <button id="log-btn" onclick="handleLog()" class="log-btn">
+          <i class="fas fa-plus-circle me-2"></i>Log Activity
+        </button>
+        <p id="log-feedback" class="log-feedback"></p>
+      </div>
     </div>
-
-    <div id="log-section" style="display:none;" class="log-section mt-3">
-      <h6 class="log-title">Activity Log</h6>
-      <table class="log-table w-100">
-        <thead>
-          <tr><th>#</th><th>Activity</th><th>Time</th></tr>
-        </thead>
-        <tbody id="log-body"></tbody>
-      </table>
-    </div>
-
-	</fieldset>
-	</div>
-    <nav>
-      <ul>
-        <li>
-          <i class="fas fa-home"></i>
-          <p>Home</p>
-        </li>
-        <li>
-          <i class="fas fa-box"></i>
-          <p>Work</p>
-        </li>
-        <li>
-          <i class="fas fa-book-open"></i>
-          <p>Blog</p>
-        </li>
-        <li>
-          <i class="fas fa-users"></i>
-          <p>About us</p>
-        </li>
-      </ul>
-    </nav>
   </div>
 
-    
+  <!-- PAGE 2: WORK - Activity Log -->
+  <div class="content" id="page-work">
+    <div class="page-inner container mt-5">
+      <h1 class="page-title">Activity Log</h1>
+      <div id="log-empty" class="empty-state">No activities logged yet.</div>
+      <div id="log-section" style="display:none;" class="log-section mt-3">
+        <table class="log-table w-100">
+          <thead>
+            <tr><th>#</th><th>Activity</th><th>Time</th><th></th></tr>
+          </thead>
+          <tbody id="log-body"></tbody>
+        </table>
+        <div class="text-center mt-3">
+          <button onclick="clearAllLogs()" class="clear-btn">
+            <i class="fas fa-trash me-1"></i>Clear All
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 3: BLOG -->
+  <div class="content" id="page-blog">
+    <div class="page-inner container mt-5">
+      <h1 class="page-title">Blog</h1>
+      <div class="info-card">
+        <i class="fas fa-pencil-alt info-icon"></i>
+        <h5>Latest Updates</h5>
+        <p>Track your favourite activities and build a log over time. Head to Home to select an activity and log it.</p>
+      </div>
+      <div class="info-card">
+        <i class="fas fa-star info-icon"></i>
+        <h5>Tips</h5>
+        <p>Use the Work tab to review and delete your logged entries. Your data is saved locally and persists across sessions.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 4: ABOUT US -->
+  <div class="content" id="page-about">
+    <div class="page-inner container mt-5">
+      <h1 class="page-title">About Us</h1>
+      <div class="info-card">
+        <i class="fas fa-users info-icon"></i>
+        <h5>Who We Are</h5>
+        <p>A simple activity tracker built with HTML, CSS and vanilla JavaScript. Select, log, and manage your activities with ease.</p>
+      </div>
+      <div class="info-card">
+        <i class="fas fa-code info-icon"></i>
+        <h5>Built With</h5>
+        <p>Bootstrap 5 · Font Awesome · Montserrat · localStorage persistence</p>
+      </div>
+    </div>
+  </div>
+
+  <nav>
+    <ul>
+      <li class="active" data-page="page-home">
+        <i class="fas fa-home"></i>
+        <p>Home</p>
+      </li>
+      <li data-page="page-work">
+        <i class="fas fa-box"></i>
+        <p>Work</p>
+      </li>
+      <li data-page="page-blog">
+        <i class="fas fa-book-open"></i>
+        <p>Blog</p>
+      </li>
+      <li data-page="page-about">
+        <i class="fas fa-users"></i>
+        <p>About us</p>
+      </li>
+    </ul>
+  </nav>
+
 </body>

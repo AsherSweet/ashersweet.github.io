@@ -12,27 +12,24 @@ function handleLog() {
   setTimeout(() => feedback.textContent = "", 2000);
 }
 
-const contents = document.querySelectorAll(".content");
-const listItems = document.querySelectorAll("nav ul li");
+document.addEventListener("DOMContentLoaded", () => {
+  const navItems = document.querySelectorAll("nav ul li");
 
-listItems.forEach((item, idx) => {
-  item.addEventListener("click", () => {
-    hideAllContents();
-    hideAllItems();
+  navItems.forEach(item => {
+    item.addEventListener("click", () => {
+      // Update nav active state
+      navItems.forEach(i => i.classList.remove("active"));
+      item.classList.add("active");
 
-    item.classList.add("active");
-    contents[idx].classList.add("show");
+      // Show corresponding page
+      const pageId = item.getAttribute("data-page");
+      document.querySelectorAll(".content").forEach(page => {
+        page.classList.remove("show");
+      });
+      document.getElementById(pageId).classList.add("show");
+
+      // Re-render log when Work tab is opened
+      if (pageId === "page-work") renderLog();
+    });
   });
 });
-
-function hideAllContents() {
-  contents.forEach((content) => {
-    content.classList.remove("show");
-  });
-}
-
-function hideAllItems() {
-  listItems.forEach((item) => {
-    item.classList.remove("active");
-  });
-}
