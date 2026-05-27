@@ -1,4 +1,12 @@
 const STORAGE_KEY = "activityDatabase";
+function getRandomColour() {
+  var letters = '0123456789ABCDEF';
+  var colour = '#';
+  for (var i = 0; i < 6; i++) {
+    colour += letters[Math.floor(Math.random() * 16)];
+  }
+  return colour;
+}
 
 function loadDatabase() {
   try {
@@ -10,6 +18,13 @@ function loadDatabase() {
 
 function saveDatabase(data) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  // Refresh the calendar if it's been initialised
+  if (typeof $ !== 'undefined') {
+    var cal = $('#calendar');
+    if (cal.length && cal.data('fullCalendar')) {
+      cal.fullCalendar('refetchEvents');
+    }
+  }
 }
 
 function activityLog(activityId, logTime) {
@@ -17,7 +32,10 @@ function activityLog(activityId, logTime) {
   const entry = {
     id: db.length ? Math.max(...db.map(e => e.id)) + 1 : 1,
     activity: activityId,
-    time: logTime || new Date().toLocaleString()
+    // Store as ISO string so Date parsing is unambiguous
+    start: logTime || new Date().toISOString(), //This needs an if query, where if it's a long activity i.e. sleeping, then the activity needs an end time
+    colour: getRandomColour()
+    //stop: 
   };
   db.push(entry);
   saveDatabase(db);
@@ -59,11 +77,12 @@ function renderLog() {
   if (logEmpty) logEmpty.style.display = "none";
 
   logs.forEach(entry => {
+    const displayTime = new Date(entry.start).toLocaleString();
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${entry.id}</td>
       <td>${entry.activity}</td>
-      <td>${entry.time}</td>
+      <td>${displayTime}</td>
       <td>
         <button class="delete-btn" onclick="removeEntry(${entry.id})" title="Delete">
           <i class="fas fa-times"></i>
