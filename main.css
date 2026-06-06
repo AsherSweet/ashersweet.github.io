@@ -4,6 +4,7 @@
 :root {
   --phone-color: #444252;
   --accent-color: #c7b0c3;
+  --nav-height: 70px;
 }
 
 * {
@@ -14,13 +15,13 @@ body {
   background-color: #eee;
   font-family: "Montserrat", sans-serif;
   margin: 0;
-  padding-bottom: 60px;
+  padding-bottom: var(--nav-height);
 }
 
 /*=============== PAGES ===============*/
 .content {
   display: none;
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - var(--nav-height));
 }
 
 .content.show {
@@ -28,7 +29,7 @@ body {
 }
 
 .page-title {
-  font-size: 22px;
+  font-size: clamp(18px, 5vw, 24px);
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--phone-color);
@@ -51,7 +52,7 @@ nav ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
-  height: 60px;
+  height: var(--nav-height);
   box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
 }
 
@@ -59,13 +60,22 @@ nav li {
   color: #777;
   cursor: pointer;
   flex: 1;
-  padding: 10px;
+  padding: 10px 4px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+nav li i {
+  font-size: clamp(18px, 5vw, 22px);
 }
 
 nav ul li p {
-  font-size: 12px;
-  margin: 2px 0;
+  font-size: clamp(10px, 2.8vw, 13px);
+  margin: 0;
 }
 
 nav ul li:hover,
@@ -74,22 +84,214 @@ nav ul li.active {
   font-weight: 900;
 }
 
+/*=============== TIME TOGGLE ===============*/
+.time-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 8px 0 4px;
+}
+
+.time-toggle-label,
+.time-toggle-hint {
+  font-size: 12px;
+  font-weight: 600;
+  color: #888;
+  letter-spacing: 0.04em;
+}
+
+.datetime-input {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 8px auto 0;
+  padding: 10px 14px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  border: 2px solid var(--accent-color);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--phone-color);
+  text-align: center;
+}
+
+/*=============== TOGGLE SWITCH ===============*/
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #ccc;
+  border-radius: 24px;
+  transition: background-color 0.2s;
+}
+
+.toggle-slider:before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: var(--accent-color);
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(20px);
+}
+
+/* Small variant for settings recurring */
+.toggle-switch-sm {
+  width: 36px;
+  height: 20px;
+}
+
+.toggle-switch-sm .toggle-slider:before {
+  height: 14px;
+  width: 14px;
+}
+
+.toggle-switch-sm input:checked + .toggle-slider:before {
+  transform: translateX(16px);
+}
+
+/*=============== ACTIVITY CARDS ===============*/
+.radioBtn {
+  display: none;
+}
+
+.radioBtn + label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 2px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 12px 6px 10px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+  width: 100%;
+  min-height: clamp(80px, 22vw, 100px);
+  position: relative;
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.radioBtn:checked + label {
+  border-color: var(--accent-color);
+  background-color: #f9f5f9;
+}
+
+.toggle-icon {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 10px;
+  color: var(--accent-color);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.radioBtn:checked + label .toggle-icon {
+  opacity: 1;
+}
+
+.activity-icon {
+  font-size: clamp(22px, 6vw, 28px);
+  margin-bottom: 6px;
+}
+
+.activity-label {
+  font-size: clamp(9px, 2.5vw, 11px);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--phone-color);
+  text-transform: uppercase;
+}
+
+.no-activities-msg {
+  text-align: center;
+  color: #aaa;
+  font-size: 13px;
+  padding: 24px 0;
+}
+
+/*=============== SLEEP BUTTON ===============*/
+.sleep-btn {
+  display: block;
+  width: 100%;
+  padding: clamp(12px, 3.5vw, 16px);
+  border: none;
+  border-radius: 14px;
+  font-family: "Montserrat", sans-serif;
+  font-size: clamp(13px, 3.5vw, 16px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sleep-btn--bedtime {
+  background-color: #2c2d54;
+  color: #a0aaff;
+}
+
+.sleep-btn--bedtime:hover,
+.sleep-btn--bedtime:active {
+  background-color: #3d3f78;
+}
+
+.sleep-btn--wake {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.sleep-btn--wake:hover,
+.sleep-btn--wake:active {
+  background-color: #fde68a;
+}
+
 /*=============== LOG BUTTON ===============*/
 .log-btn {
   background-color: var(--phone-color);
   color: var(--accent-color);
   border: 2px solid var(--accent-color);
   border-radius: 30px;
-  padding: 10px 28px;
+  padding: clamp(9px, 2.5vw, 12px) clamp(22px, 6vw, 32px);
   font-family: "Montserrat", sans-serif;
-  font-size: 13px;
+  font-size: clamp(12px, 3.5vw, 14px);
   font-weight: 700;
   letter-spacing: 0.05em;
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.log-btn:hover {
+.log-btn:hover,
+.log-btn:active {
   background-color: var(--accent-color);
   color: #fff;
 }
@@ -109,7 +311,7 @@ nav ul li.active {
 
 .log-table {
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: clamp(11px, 3vw, 13px);
 }
 
 .log-table th {
@@ -138,14 +340,40 @@ nav ul li.active {
   padding: 4px 2px;
 }
 
+.recurring-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  background: var(--accent-color);
+  color: #fff;
+  padding: 1px 5px;
+  border-radius: 10px;
+  letter-spacing: 0.05em;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+
+.ongoing-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  background: #7b9cff;
+  color: #fff;
+  padding: 1px 5px;
+  border-radius: 10px;
+  letter-spacing: 0.05em;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+
 /*=============== DELETE / CLEAR BUTTONS ===============*/
 .delete-btn {
   background: none;
   border: none;
   color: #ccc;
   cursor: pointer;
-  padding: 2px 4px;
-  font-size: 13px;
+  padding: 4px 6px;
+  font-size: clamp(13px, 3.5vw, 15px);
   transition: color 0.2s ease;
 }
 
@@ -161,7 +389,7 @@ nav ul li.active {
   font-family: "Montserrat", sans-serif;
   font-size: 12px;
   font-weight: 600;
-  padding: 6px 20px;
+  padding: 8px 22px;
   cursor: pointer;
   transition: border-color 0.2s ease, color 0.2s ease;
 }
@@ -179,39 +407,9 @@ nav ul li.active {
   margin-top: 60px;
 }
 
-/*=============== INFO CARDS ===============*/
-.info-card {
-  background: #f9f6f9;
-  border-left: 3px solid var(--accent-color);
-  border-radius: 8px;
-  padding: 16px 20px;
-  margin-bottom: 16px;
-}
-
-.info-card h5 {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--phone-color);
-  margin-bottom: 6px;
-}
-
-.info-card p {
-  font-size: 13px;
-  color: #666;
-  margin: 0;
-  line-height: 1.5;
-}
-
-.info-icon {
-  color: var(--accent-color);
-  font-size: 18px;
-  margin-bottom: 8px;
-  display: block;
-}
-
 /*=============== CALENDAR PAGE ===============*/
 #page-blog {
-  height: calc(100vh - 60px);
+  height: calc(100vh - var(--nav-height));
   overflow: hidden;
 }
 
@@ -221,9 +419,8 @@ nav ul li.active {
   font-family: "Montserrat", sans-serif;
 }
 
-/* Toolbar */
 .fc-toolbar h2 {
-  font-size: 16px;
+  font-size: clamp(13px, 4vw, 16px);
   font-weight: 700;
   color: var(--phone-color);
 }
@@ -242,11 +439,97 @@ nav ul li.active {
   border-color: var(--accent-color) !important;
 }
 
-/* Events */
 .fc-event {
-
   border-color: var(--phone-color) !important;
   color: var(--phone-color) !important;
   font-size: 11px;
   font-weight: 700;
+}
+
+/*=============== SETTINGS ===============*/
+.settings-section {
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.settings-section-title {
+  font-size: clamp(13px, 3.5vw, 15px);
+  font-weight: 700;
+  color: var(--phone-color);
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+
+.settings-hint {
+  font-size: clamp(11px, 3vw, 12px);
+  color: #888;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+.activity-setting-row {
+  border-bottom: 1px solid #f0eef0;
+}
+
+.activity-setting-row:last-child {
+  border-bottom: none;
+}
+
+.activity-setting-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 4px;
+}
+
+.activity-setting-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.activity-setting-icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.activity-setting-name {
+  font-size: clamp(13px, 3.5vw, 14px);
+  font-weight: 600;
+  color: var(--phone-color);
+}
+
+.recurring-row {
+  align-items: center;
+  gap: 8px;
+  padding: 6px 4px 12px 38px;
+  font-size: 12px;
+  color: #888;
+  flex-wrap: wrap;
+}
+
+.recurring-icon {
+  color: var(--accent-color);
+  font-size: 11px;
+}
+
+.recurring-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.recurring-time-input {
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 4px 8px;
+  color: var(--phone-color);
+  background: #f9f6f9;
 }

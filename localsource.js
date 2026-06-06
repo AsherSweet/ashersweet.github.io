@@ -14,20 +14,32 @@ function local_event_source() {
       var events = [];
       for (var i = 0; i < raw.length; i++) {
         var entry = raw[i];
-        // Parse the stored time string back to a Date
-        var date = new Date(entry.start);
-        if (isNaN(date.getTime())) continue; // skip unparseable entries
+        var startDate = new Date(entry.start);
+        if (isNaN(startDate.getTime())) continue;
 
-        var momentDate = moment(date);
-        // Only include events within the current calendar view range
-        if (!momentDate.isBetween(start, end, null, '[]')) continue;
+        var momentStart = moment(startDate);
+        var endDate;
+
+        if (entry.type === 'sleep') {
+          // Sleep entries span from start to end (or now if still open)
+          endDate = entry.end ? new Date(entry.end) : new Date();
+          var momentEnd = moment(endDate);
+          // Include if the event overlaps with the current view at all
+          if (momentEnd.isBefore(start) || momentStart.isAfter(end)) continue;
+        } else {
+          if (!momentStart.isBetween(start, end, null, '[]')) continue;
+          endDate = new Date(startDate.getTime() + 30 * 60 * 1000); // 30min block
+        }
 
         events.push({
-          id:    entry.id,
-          title: entry.activity,
-          start: date,
-          end:   new Date(date.getTime() + 30 * 60 * 1000), // 30min block
-          color: entry.colour
+          id:     entry.id,
+          title:  entry.type === 'sleep'
+                    ? (entry.end ? 'Sleep' : 'Sleep (ongoing)')
+                    : entry.activity,
+          start:  startDate,
+          end:    endDate,
+          color:  entry.colour,
+          allDay: false
         });
       }
       callback(events);

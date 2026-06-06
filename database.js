@@ -1,12 +1,148 @@
 const STORAGE_KEY = "activityDatabase";
-function getRandomColour() {
-  var letters = '0123456789ABCDEF';
-  var colour = '#';
-  for (var i = 0; i < 6; i++) {
-    colour += letters[Math.floor(Math.random() * 16)];
+const SETTINGS_KEY = "activitySettings";
+
+const DEFAULT_ACTIVITIES = [
+  { id: 'exercise',   name: 'Exercise',   icon: 'fa-person-running', color: '#5b8dd9' },
+  { id: 'caffeine',   name: 'Caffeine',   icon: 'fa-mug-hot',        color: '#d4845a' },
+  { id: 'alcohol',    name: 'Alcohol',    icon: 'fa-wine-glass',     color: '#9b6dbd' },
+  { id: 'meal',       name: 'Meal',       icon: 'fa-utensils',       color: '#5b9b6d' },
+  { id: 'medication', name: 'Medication', icon: 'fa-pills',          color: '#d45a7a' },
+  { id: 'light',      name: 'Light',      icon: 'fa-sun',            color: '#d4b85a' },
+  { id: 'stress',     name: 'Stress',     icon: 'fa-brain',          color: '#7a5a9b' },
+  { id: 'screen',     name: 'Screen',     icon: 'fa-display',        color: '#5ab8d4' },
+  { id: 'water',      name: 'Water',      icon: 'fa-droplet',        color: '#5a9bd4' },
+];
+
+// ── Settings ──────────────────────────────────────────────────────────────
+
+function getSettings() {
+  try {
+    const s = JSON.parse(localStorage.getItem(SETTINGS_KEY));
+    if (!s) return { enabled: ['exercise', 'caffeine', 'meal'], recurring: {} };
+    if (!s.recurring) s.recurring = {};
+    return s;
+  } catch {
+    return { enabled: ['exercise', 'caffeine', 'meal'], recurring: {} };
   }
-  return colour;
 }
+
+function saveSettings(settings) {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+}
+
+function getEnabledActivities() {
+  const { enabled } = getSettings();
+  return DEFAULT_ACTIVITIES.filter(a => enabled.includes(a.id));
+}
+
+function toggleActivity(activityId) {
+  const settings = getSettings();
+  const idx = settings.enabled.indexOf(activityId);
+  if (idx === -1) {
+    settings.enabled.push(activityId);
+  } else {
+    settings.enabled.splice(idx, 1);
+  }
+  saveSettings(settings);
+}
+
+// ── Recurring ─────────────────────────────────────────────────────────────
+
+function setRecurring(activityId, time) {
+  const settings = getSettings();
+  // lastFired = yesterday so today's entry fills immediately if time has passed
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  settings.recurring[activityId] = {
+    time,
+    enabled: true,
+    lastFired: yesterday.toISOString().split('T')[0]
+  };
+  saveSettings(settings);
+  checkAndFillRecurring();
+}
+
+function setRecurringEnabled(activityId, enabled) {
+  const settings = getSettings();
+  if (!settings.recurring[activityId]) return;
+  settings.recurring[activityId].enabled = enabled;
+  saveSettings(settings);
+}
+
+function removeRecurring(activityId) {
+  const settings = getSettings();
+  delete settings.recurring[activityId];
+  saveSettings(settings);
+}
+
+function checkAndFillRecurring() {
+  const settings = getSettings();
+  const now = new Date();
+  let changed = false;
+
+  for (const [activityId, rule] of Object.entries(settings.recurring)) {
+    if (!rule.enabled || !rule.time) continue;
+
+    const activity = DEFAULT_ACTIVITIES.find(a => a.id === activityId);
+    if (!activity) continue;
+
+    const [ruleHour, ruleMin] = rule.time.split(':').map(Number);
+
+    // Start checking from the day after lastFired
+    let checkDate = rule.lastFired
+      ? new Date(rule.lastFired + 'T00:00:00')
+      : new Date(now);
+    if (rule.lastFired) checkDate.setDate(checkDate.getDate() + 1);
+    checkDate.setHours(0, 0, 0, 0);
+
+    const todayMidnight = new Date(now);
+    todayMidnight.setHours(0, 0, 0, 0);
+
+    while (checkDate <= todayMidnight) {
+      const entryTime = new Date(checkDate);
+      entryTime.setHours(ruleHour, ruleMin, 0, 0);
+
+      if (entryTime <= now) {
+        _insertRawEntry({
+          activity: activity.name,
+          activityId: activityId,
+          start: entryTime.toISOString(),
+          type: 'regular',
+          colour: activity.color,
+          recurring: true
+        });
+        settings.recurring[activityId].lastFired = checkDate.toISOString().split('T')[0];
+        changed = true;
+      }
+
+      checkDate.setDate(checkDate.getDate() + 1);
+    }
+  }
+
+  if (changed) {
+    saveSettings(settings);
+    renderLog();
+    _refreshCalendar();
+  }
+}
+
+function _insertRawEntry(entry) {
+  const db = loadDatabase();
+  entry.id = db.length ? Math.max(...db.map(e => e.id)) + 1 : 1;
+  db.push(entry);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+}
+
+function _refreshCalendar() {
+  if (typeof $ !== 'undefined') {
+    const cal = $('#calendar');
+    if (cal.length && cal.data('fullCalendar')) {
+      cal.fullCalendar('refetchEvents');
+    }
+  }
+}
+
+// ── Database ──────────────────────────────────────────────────────────────
 
 function loadDatabase() {
   try {
@@ -18,24 +154,19 @@ function loadDatabase() {
 
 function saveDatabase(data) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  // Refresh the calendar if it's been initialised
-  if (typeof $ !== 'undefined') {
-    var cal = $('#calendar');
-    if (cal.length && cal.data('fullCalendar')) {
-      cal.fullCalendar('refetchEvents');
-    }
-  }
+  _refreshCalendar();
 }
 
-function activityLog(activityId, logTime) {
+function activityLog(activityName, logTime) {
   const db = loadDatabase();
+  const activityDef = DEFAULT_ACTIVITIES.find(a => a.name === activityName || a.id === activityName);
   const entry = {
     id: db.length ? Math.max(...db.map(e => e.id)) + 1 : 1,
-    activity: activityId,
-    // Store as ISO string so Date parsing is unambiguous
-    start: logTime || new Date().toISOString(), //This needs an if query, where if it's a long activity i.e. sleeping, then the activity needs an end time
-    colour: getRandomColour()
-    //stop: 
+    activity: activityDef ? activityDef.name : activityName,
+    activityId: activityDef ? activityDef.id : activityName.toLowerCase(),
+    start: logTime || new Date().toISOString(),
+    type: 'regular',
+    colour: activityDef ? activityDef.color : getRandomColour()
   };
   db.push(entry);
   saveDatabase(db);
@@ -43,13 +174,54 @@ function activityLog(activityId, logTime) {
   return entry;
 }
 
+// ── Sleep ─────────────────────────────────────────────────────────────────
+
+function getOpenSleepEntry() {
+  return loadDatabase().find(e => e.type === 'sleep' && !e.end) || null;
+}
+
+function logSleepStart(startTime) {
+  const db = loadDatabase();
+  const entry = {
+    id: db.length ? Math.max(...db.map(e => e.id)) + 1 : 1,
+    activity: 'Sleep',
+    activityId: 'sleep',
+    start: startTime || new Date().toISOString(),
+    end: null,
+    type: 'sleep',
+    colour: '#7b9cff'
+  };
+  db.push(entry);
+  saveDatabase(db);
+  renderLog();
+  return entry;
+}
+
+function logSleepEnd(endTime) {
+  const db = loadDatabase();
+  const open = db.find(e => e.type === 'sleep' && !e.end);
+  if (!open) return null;
+  open.end = endTime || new Date().toISOString();
+  saveDatabase(db);
+  renderLog();
+  return open;
+}
+
+// ── Utilities ─────────────────────────────────────────────────────────────
+
+function getRandomColour() {
+  const letters = '0123456789ABCDEF';
+  let colour = '#';
+  for (let i = 0; i < 6; i++) colour += letters[Math.floor(Math.random() * 16)];
+  return colour;
+}
+
 function getLogs() {
   return loadDatabase();
 }
 
 function removeEntry(id) {
-  const db = loadDatabase().filter(e => e.id !== id);
-  saveDatabase(db);
+  saveDatabase(loadDatabase().filter(e => e.id !== id));
   renderLog();
 }
 
@@ -77,12 +249,19 @@ function renderLog() {
   if (logEmpty) logEmpty.style.display = "none";
 
   logs.forEach(entry => {
-    const displayTime = new Date(entry.start).toLocaleString();
+    const startStr = new Date(entry.start).toLocaleString();
+    let timeCell = startStr;
+    if (entry.type === 'sleep') {
+      timeCell = entry.end
+        ? `${startStr} → ${new Date(entry.end).toLocaleString()}`
+        : `${startStr} <span class="ongoing-badge">ongoing</span>`;
+    }
+    const recurBadge = entry.recurring ? '<span class="recurring-badge">auto</span>' : '';
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${entry.id}</td>
-      <td>${entry.activity}</td>
-      <td>${displayTime}</td>
+      <td>${entry.activity}${recurBadge}</td>
+      <td>${timeCell}</td>
       <td>
         <button class="delete-btn" onclick="removeEntry(${entry.id})" title="Delete">
           <i class="fas fa-times"></i>
@@ -92,4 +271,7 @@ function renderLog() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", renderLog);
+document.addEventListener("DOMContentLoaded", () => {
+  checkAndFillRecurring();
+  renderLog();
+});
