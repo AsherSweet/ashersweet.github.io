@@ -194,8 +194,8 @@ const showPrompt = (deferredPrompt) => {
 function main() {
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   const isRunningAsPWA =
-  window.matchMedia('(display-mode: standalone)').matches
-  || window.navigator.standalone === true; // iOS
+    window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true;
 
   appendStyles();
 
@@ -203,13 +203,12 @@ function main() {
   const container = createContainer();
   container.innerHTML = getModalContent(isIOS);
 
-  // initializeModal
-
+  // NOW the modal exists in the DOM, so this will work
+  handleHashChange();
 
   initializePWAInfo();
-
   initializeModalEvents();
-  handleHashChange();
+
   // initialize hash change event
   window.addEventListener('hashchange', handleHashChange);
 
