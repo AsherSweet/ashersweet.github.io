@@ -1,253 +1,244 @@
-/*!
- * pwa-install-prompt
- * Copyright (c) 2024 ryxxn
- * Released under the MIT License
- * https://github.com/ryxxn/pwa-install-prompt
- */
+const CONFIG = {
+  title: 'Install Sleep Diary',
+  skipButtonText: "Don't install",
+  installButtonText: 'Install As an App',
+  unavailableText: 'Not available',
+  iosTitle: 'Install Sleep Diary',
+  iosStep1: 'Click the share icon in the browser address bar',
+  iosStep2: "Click 'Add to Home Screen'",
+};
 
-
-// constants
-
-/**
- * !You can modify this part to change the language!
- */
-const TEXT = {
-  // common text
-  TITLE: 'Install Sleep Diary', // Install as an app
-  WAITING: 'Waiting...', // Loading app info...
-  SKIP_BUTTON: 'Don\'t install the cool app', // I'm fine, I'll just view it on my mobile.
-  INSTALL_BUTTON: 'Install As an App', // Install as an app
-  INSTALL_UNAVAILABLE: 'Not available', // The app is already installed or your environment doesn't support installation.
-  // IOS device specific text
-  IOS: {
-    TITLE: 'Intall Sleep Diary', // IOS App Installation Method
-    INSTALL_STEPS: {
-      STEP_1_1: 'Click the icon', // Click the icon
-      STEP_1_2: 'in the browser address bar', // in the browser address bar
-      STEP_2: "'Add to Home Screen.", // Click 'Add to Home Screen'.
-    }
-  },
-}
-
-const MODAL_STYLE = `
-.wepp-modal-overlay * { box-sizing: border-box; }
-.wepp-modal-overlay { display: flex; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, .5); justify-content: center; align-items: center; z-index: 99999; }
-.wepp-modal-content { min-width: 340px; max-width:340px; background: #fff; border-radius: 10px; position: relative; }
-.wepp-modal-content h1 { font-size: 18px; }
-.wepp-modal-body { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-#wepp-logo { border-radius: 8px; }
-#wepp-install-button { width: 100%; background: #007bff; color: #fff; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; font-weight: 700; transition: .3s; }
-#wepp-install-button:hover { background: #0056b3; }
-#wepp-install-button:active { transform: scale(.98); }
-#wepp-install-button:disabled { opacity:0.7; cursor: not-allowed; }
-#wepp-skip-button { all: initial; font:inherit; width: 100%; text-align: center; cursor: pointer; color: #a0a0a0; font-size: 14px; text-decoration: underline; }
-`;
-const IOS_MODAL_CONTENT = `
-<div class="wepp-modal-content" style="padding: 20px;">
-<div class="wepp-modal-body">
-<h1 style="margin-top: 0; margin-bottom: 10px;">${TEXT.IOS.TITLE}</h1>
-<img id="wepp-logo" alt="logo" width="64" height="64" />
-<h2 id="wepp-name"></h2>
-</div>
-<ol style="margin-block:4px;padding:0;margin-left:20px;">
-<li>
-${TEXT.IOS.INSTALL_STEPS.STEP_1_1}
-<span style="vertical-align:middle;">
-<svg
-version="1.1"
-viewBox="0 0 2048 2048"
-width="24"
-height="24"
-xmlns="http://www.w3.org/2000/svg"
->
-<path
-transform="translate(600,655)"
-d="m0 0h301l1 2v79l-1 1-284 1-17 2-10 5-6 5-6 10-3 11v751l3 12 7 10 8 6 8 3 12 2h776l54-1 12-4 9-7 6-10 3-14v-744l-2-12-5-10-5-6-14-7-4-1-18-1-278-1-1-1v-81h301l18 3 16 5 16 8 12 8 12 10v2l3 1 9 11 9 14 8 17 4 14 2 12 1 15v744l-2 21-6 21-9 19-10 14-12 13-10 8-11 7-14 7-18 6-17 3-13 1h-824l-20-2-19-5-16-7-12-7-16-13-11-12-10-15-8-16-5-17-3-18-1-42v-658l1-61 3-18 5-16 4-9 7-13 8-11 3-4h2l2-4 13-12 16-10 15-7 18-5z"
-/>
-<path
-transform="translate(1023,229)"
-d="m0 0 5 3 269 269 1 4-53 53-2 3-4-1-172-172-1 3v753l-2 3h-81l-1-2v-758l-174 174h-3l-7-8-48-48 1-5 10-9 162-162 5-6 7-6 5-6 7-6 5-6 7-6 5-6 7-6 5-6 7-6 5-6 7-6 5-6 8-7z"
-/>
-</svg>
-</span>
-${TEXT.IOS.INSTALL_STEPS.STEP_1_2}
-</li>
-<li>
-<p style="margin-block:4px;">${TEXT.IOS.INSTALL_STEPS.STEP_2}</p>
-</li>
-</ol>
-
-<button id="wepp-skip-button">${TEXT.SKIP_BUTTON}</button>
-</div>
-`;
-const DEFAULT_MODAL_CONTENT = `
-<div class="wepp-modal-content" style="padding: 20px;">
-<div class="wepp-modal-body">
-<h1 style="margin-top: 0; margin-bottom: 10px;">${TEXT.TITLE}</h1>
-<img id="wepp-logo" alt="logo" width="64" height="64" />
-<h2 id="wepp-name"></h2>
-</div>
-<button id="wepp-install-button" style="margin-top: 10px;padding: 10px;" disabled>${TEXT.WAITING}</button>
-<button id="wepp-skip-button" style="margin-top: 20px">
-${TEXT.SKIP_BUTTON}
-</button>
-</div>
-`
-
-// functions
-
-/**
- * Function that identifies the favicon as the default logo
- * and gets the address
- */
-function getFaviconHref() {
-  const linkElements = document.getElementsByTagName('link');
-
-  for (let i = 0; i < linkElements.length; i++) {
-    if (linkElements[i].getAttribute('rel') === 'icon') {
-      return linkElements[i].getAttribute('href');
-    }
-  }
-
-  return '';
-}
-
-function appendStyles() {
+function createStyles() {
   const style = document.createElement('style');
-  style.textContent = MODAL_STYLE;
-
+  style.textContent = `
+    .pwa-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+    }
+    
+    .pwa-modal-overlay.active {
+      display: flex;
+    }
+    
+    .pwa-modal-content {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      min-width: 340px;
+      max-width: 340px;
+      box-sizing: border-box;
+    }
+    
+    .pwa-modal-content h1 {
+      font-size: 18px;
+      margin: 0 0 10px 0;
+    }
+    
+    .pwa-modal-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .pwa-modal-logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+    }
+    
+    .pwa-install-button {
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-bottom: 20px;
+    }
+    
+    .pwa-install-button:hover:not(:disabled) {
+      background: #0056b3;
+    }
+    
+    .pwa-install-button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    
+    .pwa-skip-button {
+      background: none;
+      border: none;
+      color: #a0a0a0;
+      font-size: 14px;
+      text-decoration: underline;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    
+    .pwa-ios-steps {
+      margin: 10px 0;
+      padding-left: 20px;
+    }
+  `;
   document.head.appendChild(style);
 }
 
-const getModalContent = (isIOS) => {
-  return isIOS ? IOS_MODAL_CONTENT : DEFAULT_MODAL_CONTENT;
-};
-
-function createContainer() {
-  const container = document.createElement('div');
-  container.id = 'wepp-install-modal';
-  container.className = 'wepp-modal-overlay';
-  document.body.appendChild(container);
-  return container;
+function getFavicon() {
+  const links = document.querySelectorAll('link[rel="icon"]');
+  if (links.length > 0) {
+    return links[0].href;
+  }
+  return '';
 }
 
-const handleHashChange = () => {
-  const hash = window.location.hash;
-  const isValidHash = hash.startsWith('#wepp-install-modal');
+function createModal(isIOS) {
+  const modal = document.createElement('div');
+  modal.id = 'pwa-install-modal';
+  modal.className = 'pwa-modal-overlay';
 
-  const modal = document.getElementById('wepp-install-modal');
-  modal.style.display = isValidHash ? 'flex' : 'none';
-};
+  if (isIOS) {
+    modal.innerHTML = `
+      <div class="pwa-modal-content">
+        <div class="pwa-modal-body">
+          <h1>${CONFIG.iosTitle}</h1>
+          <img class="pwa-modal-logo" alt="app logo" />
+          <h2 id="pwa-app-name"></h2>
+        </div>
+        <ol class="pwa-ios-steps">
+          <li>${CONFIG.iosStep1}</li>
+          <li>${CONFIG.iosStep2}</li>
+        </ol>
+        <button class="pwa-skip-button" id="pwa-skip-btn">${CONFIG.skipButtonText}</button>
+      </div>
+    `;
+  } else {
+    modal.innerHTML = `
+      <div class="pwa-modal-content">
+        <div class="pwa-modal-body">
+          <h1>${CONFIG.title}</h1>
+          <img class="pwa-modal-logo" alt="app logo" />
+          <h2 id="pwa-app-name"></h2>
+        </div>
+        <button class="pwa-install-button" id="pwa-install-btn" disabled>${CONFIG.unavailableText}</button>
+        <button class="pwa-skip-button" id="pwa-skip-btn">${CONFIG.skipButtonText}</button>
+      </div>
+    `;
+  }
 
-const initializePWAInfo = () => {
-  const nameElement = document.getElementById('wepp-name');
-  const logoElement = document.getElementById('wepp-logo');
-
-  const name = document.title;
-  const logo = getFaviconHref();
-
-  nameElement.textContent = name;
-  logoElement.src = logo;
+  document.body.appendChild(modal);
+  return modal;
 }
 
-function handleModalClose() {
-  window.location.hash = '';
-  const modal = document.getElementById('wepp-install-modal');
-  modal.style.display = 'none';
-}
-
-function preventModalContentClick(event) {
-  event.stopPropagation();
-}
-
-function initializeModalEvents() {
-  const modal = document.getElementById('wepp-install-modal');
-  const skipButton = document.getElementById('wepp-skip-button');
-  const modalContent = modal.querySelector('.wepp-modal-content');
-
-  // Close Modal on Background Click
-  modal.addEventListener('click', handleModalClose);
-  modalContent.addEventListener('click', preventModalContentClick);
-
-  skipButton.addEventListener('click', handleModalClose);
-}
-
-const showPrompt = (deferredPrompt) => {
-  try {
-    deferredPrompt.prompt(); // Show the install prompt
-    // Wait for the user to respond to the prompt
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        // User accepted the install prompt
-        handleModalClose();
-      } else {
-        // User dismissed the install prompt
-      }
-      // Clear the deferredPrompt variable
-      deferredPrompt = null;
-    });
-  } catch (error) {
-    console.log('Error: ', error);
+function closeModal() {
+  const modal = document.getElementById('pwa-install-modal');
+  if (modal) {
+    modal.classList.remove('active');
   }
 }
 
-function main() {
+function openModal() {
+  const modal = document.getElementById('pwa-install-modal');
+  if (modal) {
+    modal.classList.add('active');
+  }
+}
+
+function init() {
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   const isRunningAsPWA =
-    window.matchMedia('(display-mode: standalone)').matches
-    || window.navigator.standalone === true;
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true;
 
-  appendStyles();
-
-  // Create Modal containers and add them to dom
-  const container = createContainer();
-  container.innerHTML = getModalContent(isIOS);
-
-  // NOW the modal exists in the DOM, so this will work
-  handleHashChange();
-
-  initializePWAInfo();
-  initializeModalEvents();
-
-  // initialize hash change event
-  window.addEventListener('hashchange', handleHashChange);
-
-  // ----------------------------------------------------------
+  // Don't show if already installed
   if (isRunningAsPWA) {
-    handleModalClose();
+    return;
   }
-  else if (!isIOS) {
-    let beforeInstallPromptFired = false;
-    const installButton = document.getElementById('wepp-install-button');
+
+  createStyles();
+  const modal = createModal(isIOS);
+
+  // Set app info
+  const logoImg = modal.querySelector('.pwa-modal-logo');
+  const nameEl = modal.querySelector('#pwa-app-name');
+  logoImg.src = getFavicon();
+  nameEl.textContent = document.title;
+
+  // Set up close button
+  const skipBtn = modal.querySelector('#pwa-skip-btn');
+  skipBtn.addEventListener('click', closeModal);
+
+  // Prevent modal close when clicking content
+  const content = modal.querySelector('.pwa-modal-content');
+  content.addEventListener('click', (e) => e.stopPropagation());
+
+  // Close modal on background click
+  modal.addEventListener('click', closeModal);
+
+  // Handle install button for non-iOS
+  if (!isIOS) {
+    const installBtn = modal.querySelector('#pwa-install-btn');
 
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       const deferredPrompt = e;
-      installButton.addEventListener('click', () => showPrompt(deferredPrompt), { once: true })
-      installButton.innerText = TEXT.INSTALL_BUTTON;
-      installButton.disabled = false;
 
-      beforeInstallPromptFired = true;
+      installBtn.textContent = CONFIG.installButtonText;
+      installBtn.disabled = false;
+
+      installBtn.addEventListener('click', async () => {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+
+        if (outcome === 'accepted') {
+          closeModal();
+        }
+
+        deferredPrompt = null;
+      });
     });
 
-    // Give the browser time to fire the beforeinstallprompt event
+    // Timeout for browsers that don't support beforeinstallprompt
     setTimeout(() => {
-      if (!beforeInstallPromptFired) {
-        installButton.innerText = TEXT.INSTALL_UNAVAILABLE;
-        installButton.disabled = true;
+      if (installBtn.disabled && installBtn.textContent === CONFIG.unavailableText) {
+        // Still unavailable after timeout
       }
-    }, 1000); // 1 second delay
+    }, 1000);
   }
 
-  window.addEventListener('appinstalled', () => {
-    console.log('PWA was installed');
+  // Hash-based modal control
+  window.addEventListener('hashchange', () => {
+    if (window.location.hash === '#pwa-install') {
+      openModal();
+    } else {
+      closeModal();
+    }
   });
+
+  // Open modal if hash is set on load
+  if (window.location.hash === '#pwa-install') {
+    openModal();
+  }
+
+  console.log('PWA Install Prompt initialized');
 }
 
-if (document.readyState === "loading") {
-  // Loading hasn't finished yet
-  document.addEventListener("DOMContentLoaded", main);
+// Run when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
 } else {
-  // `DOMContentLoaded` has already fired
-  main();
+  init();
 }
