@@ -13,25 +13,25 @@
  */
 const TEXT = {
   // common text
-  TITLE: '앱으로 설치하기', // Install as an app
-  WAITING: '앱 정보 불러오는 중...', // Loading app info...
-  SKIP_BUTTON: '괜찮아요, 모바일 웹으로 볼게요.', // I'm fine, I'll just view it on my mobile.
-  INSTALL_BUTTON: '앱 설치하기', // Install as an app
-  INSTALL_UNAVAILABLE: '이미 앱이 설치되어 있거나, 설치를 지원하지 않는 환경이에요.', // The app is already installed or your environment doesn't support installation.
+  TITLE: 'Install Sleep Diary', // Install as an app
+  WAITING: 'Waiting...', // Loading app info...
+  SKIP_BUTTON: 'Don\'t install the cool app', // I'm fine, I'll just view it on my mobile.
+  INSTALL_BUTTON: 'Install As an App', // Install as an app
+  INSTALL_UNAVAILABLE: 'Not available', // The app is already installed or your environment doesn't support installation.
   // IOS device specific text
   IOS: {
-    TITLE: 'IOS 앱 설치 방법', // IOS App Installation Method
+    TITLE: 'Intall Sleep Diary', // IOS App Installation Method
     INSTALL_STEPS: {
-      STEP_1_1: '브라우저 주소 표시줄에', // Click the icon
-      STEP_1_2: '아이콘을 클릭하세요.', // in the browser address bar
-      STEP_2: "'홈 화면에 추가'를 눌러주세요.", // Click 'Add to Home Screen'.
+      STEP_1_1: 'Click the icon', // Click the icon
+      STEP_1_2: 'in the browser address bar', // in the browser address bar
+      STEP_2: "'Add to Home Screen.", // Click 'Add to Home Screen'.
     }
   },
 }
 
 const MODAL_STYLE = `
 .wepp-modal-overlay * { box-sizing: border-box; }
-.wepp-modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, .5); justify-content: center; align-items: center; z-index: 99999; }
+.wepp-modal-overlay { display: flex; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, .5); justify-content: center; align-items: center; z-index: 99999; }
 .wepp-modal-content { min-width: 340px; max-width:340px; background: #fff; border-radius: 10px; position: relative; }
 .wepp-modal-content h1 { font-size: 18px; }
 .wepp-modal-body { display: flex; flex-direction: column; align-items: center; gap: 10px; }
@@ -204,12 +204,12 @@ function main() {
   container.innerHTML = getModalContent(isIOS);
 
   // initializeModal
-  handleHashChange();
+
 
   initializePWAInfo();
 
   initializeModalEvents();
-
+  handleHashChange();
   // initialize hash change event
   window.addEventListener('hashchange', handleHashChange);
 
