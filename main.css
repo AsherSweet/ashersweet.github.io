@@ -533,3 +533,15 @@ nav ul li.active {
   color: var(--phone-color);
   background: #f9f6f9;
 }
+
+
+/*=============== PWA INSTaLLER ===============*/
+
+#installInstructions {
+   display: none
+}
+@media (display-mode: browser) {
+   #installInstructions {
+     display: block
+   }
+}

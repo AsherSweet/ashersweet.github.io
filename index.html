@@ -16,7 +16,10 @@
 <script src="localsource.js" defer></script>
 <script src="database.js" defer></script>
 <script src="interface.js" defer></script>
+
 <link rel="stylesheet" href="main.css" />
+  <!-- PWA stuff-->
+<script src="installpwa.js" defer></script>
 <link rel="manifest" href="manifest.json">
 </head>
 <body>
@@ -26,7 +29,7 @@
     <div class="page-inner container mt-4">
       <h1 class="page-title">Activities</h1>
 
-      <!-- Manual Time Toggle -->
+      <!-- manual time toggle -->
       <div class="time-toggle-row">
         <span class="time-toggle-label">Now</span>
         <label class="toggle-switch">
@@ -39,7 +42,7 @@
         <input type="datetime-local" id="manual-datetime" class="datetime-input" />
       </div>
 
-      <!-- Activity Grid — rendered by JS -->
+      <!-- Activity Grid -->
       <fieldset>
         <div class="row g-3 mt-1" id="activity-grid"></div>
       </fieldset>
