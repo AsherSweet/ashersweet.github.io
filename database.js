@@ -13,7 +13,7 @@ const DEFAULT_ACTIVITIES = [
   { id: 'water',      name: 'Water',      icon: 'fa-droplet',        color: '#5a9bd4' },
 ];
 
-// ── Settings ──────────────────────────────────────────────────────────────
+//  Settings 
 
 function getSettings() {
   try {
@@ -46,11 +46,10 @@ function toggleActivity(activityId) {
   saveSettings(settings);
 }
 
-// ── Recurring ─────────────────────────────────────────────────────────────
+//  Recurring ─
 
 function setRecurring(activityId, time) {
   const settings = getSettings();
-  // lastFired = yesterday so today's entry fills immediately if time has passed
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   settings.recurring[activityId] = {
@@ -88,7 +87,6 @@ function checkAndFillRecurring() {
 
     const [ruleHour, ruleMin] = rule.time.split(':').map(Number);
 
-    // Start checking from the day after lastFired
     let checkDate = rule.lastFired
       ? new Date(rule.lastFired + 'T00:00:00')
       : new Date(now);
@@ -142,7 +140,7 @@ function _refreshCalendar() {
   }
 }
 
-// ── Database ──────────────────────────────────────────────────────────────
+//  Database 
 
 function loadDatabase() {
   try {
@@ -157,7 +155,7 @@ function saveDatabase(data) {
   _refreshCalendar();
 }
 
-function activityLog(activityName, logTime) {
+function activityLog(activityName, logTime, endTime) {
   const db = loadDatabase();
   const activityDef = DEFAULT_ACTIVITIES.find(a => a.name === activityName || a.id === activityName);
   const entry = {
@@ -165,6 +163,7 @@ function activityLog(activityName, logTime) {
     activity: activityDef ? activityDef.name : activityName,
     activityId: activityDef ? activityDef.id : activityName.toLowerCase(),
     start: logTime || new Date().toISOString(),
+    end: endTime || null,
     type: 'regular',
     colour: activityDef ? activityDef.color : getRandomColour()
   };
@@ -174,7 +173,16 @@ function activityLog(activityName, logTime) {
   return entry;
 }
 
-// ── Sleep ─────────────────────────────────────────────────────────────────
+function updateEntry(id, fields) {
+  const db = loadDatabase();
+  const entry = db.find(e => e.id === id);
+  if (!entry) return;
+  Object.assign(entry, fields);
+  saveDatabase(db);
+  renderLog();
+}
+
+//  Sleep ─
 
 function getOpenSleepEntry() {
   return loadDatabase().find(e => e.type === 'sleep' && !e.end) || null;
@@ -197,17 +205,18 @@ function logSleepStart(startTime) {
   return entry;
 }
 
-function logSleepEnd(endTime) {
+function logSleepEnd(endTime, quality) {
   const db = loadDatabase();
   const open = db.find(e => e.type === 'sleep' && !e.end);
   if (!open) return null;
   open.end = endTime || new Date().toISOString();
+  if (quality != null) open.quality = quality;
   saveDatabase(db);
   renderLog();
   return open;
 }
 
-// ── Utilities ─────────────────────────────────────────────────────────────
+//  Utilities ─
 
 function getRandomColour() {
   const letters = '0123456789ABCDEF';
@@ -250,17 +259,24 @@ function renderLog() {
 
   logs.forEach(entry => {
     const startStr = new Date(entry.start).toLocaleString();
-    let timeCell = startStr;
+    let timeCell;
     if (entry.type === 'sleep') {
       timeCell = entry.end
         ? `${startStr} → ${new Date(entry.end).toLocaleString()}`
         : `${startStr} <span class="ongoing-badge">ongoing</span>`;
+    } else {
+      timeCell = entry.end
+        ? `${startStr} → ${new Date(entry.end).toLocaleString()}`
+        : startStr;
     }
     const recurBadge = entry.recurring ? '<span class="recurring-badge">auto</span>' : '';
+    const qualityStars = (entry.type === 'sleep' && entry.quality)
+      ? `<span class="quality-badge">${'★'.repeat(entry.quality)}</span>`
+      : '';
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${entry.id}</td>
-      <td>${entry.activity}${recurBadge}</td>
+      <td>${entry.activity}${recurBadge}${qualityStars}</td>
       <td>${timeCell}</td>
       <td>
         <button class="delete-btn" onclick="removeEntry(${entry.id})" title="Delete">

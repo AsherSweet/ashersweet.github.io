@@ -1,18 +1,43 @@
 var calendarInitialised = false;
+var editingEntryId = null;
 
-// ── Time Toggle ───────────────────────────────────────────────────────────
+
+function toDatetimeLocal(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  const pad = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 
 function handleTimeToggle(checkbox) {
-  const picker = document.getElementById('manual-time-picker');
-  const input  = document.getElementById('manual-datetime');
+  const picker      = document.getElementById('manual-time-picker');
+  const input       = document.getElementById('manual-datetime');
+  const inputEnd    = document.getElementById('manual-datetime-end');
+  const sleepManual = document.getElementById('sleep-manual-times');
+  const sleepStart  = document.getElementById('sleep-start');
+  const sleepEnd    = document.getElementById('sleep-end');
+
   if (checkbox.checked) {
-    const now = new Date();
-    const pad = n => String(n).padStart(2, '0');
-    input.value = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
-    picker.style.display = 'block';
+    const now = toDatetimeLocal(new Date().toISOString());
+    input.value      = now;
+    inputEnd.value   = '';
+    if (sleepStart) sleepStart.value = now;
+    if (sleepEnd)   sleepEnd.value   = '';
+    picker.style.display      = 'block';
+    if (sleepManual) sleepManual.style.display = 'block';
+    updateSleepEndRowVisibility();
   } else {
     picker.style.display = 'none';
+    if (sleepManual) sleepManual.style.display = 'none';
   }
+}
+
+function updateSleepEndRowVisibility() {
+  const endRow = document.getElementById('sleep-end-row');
+  if (!endRow) return;
+  // Hide end input when there's already an open sleep (only need wake time)
+  endRow.style.display = getOpenSleepEntry() ? 'none' : 'flex';
 }
 
 function getLogTime() {
@@ -24,7 +49,28 @@ function getLogTime() {
   return new Date().toISOString();
 }
 
-// ── Activity Grid ─────────────────────────────────────────────────────────
+function getLogEndTime() {
+  const toggle = document.getElementById('manual-time-toggle');
+  if (toggle && toggle.checked) {
+    const input = document.getElementById('manual-datetime-end');
+    if (input && input.value) return new Date(input.value).toISOString();
+  }
+  return null;
+}
+
+function getSleepManualStart() {
+  const input = document.getElementById('sleep-start');
+  if (input && input.value) return new Date(input.value).toISOString();
+  return getLogTime();
+}
+
+function getSleepManualEnd() {
+  const input = document.getElementById('sleep-end');
+  if (input && input.value) return new Date(input.value).toISOString();
+  return null;
+}
+
+
 
 function renderActivityGrid() {
   const grid = document.getElementById('activity-grid');
@@ -52,7 +98,7 @@ function renderActivityGrid() {
   });
 }
 
-// ── Log Activity ──────────────────────────────────────────────────────────
+// Log Activity
 
 function handleLog() {
   const selected = document.querySelector('.radioBtn:checked');
@@ -62,46 +108,115 @@ function handleLog() {
     feedback.style.color = "#e07070";
     return;
   }
-  activityLog(selected.value, getLogTime());
+  activityLog(selected.value, getLogTime(), getLogEndTime());
   feedback.textContent = `"${selected.value}" logged!`;
   feedback.style.color = "var(--accent-color)";
   setTimeout(() => feedback.textContent = "", 2000);
 }
 
-// ── Sleep Toggle ──────────────────────────────────────────────────────────
+// Star Rating
+
+function initStarRating(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.querySelectorAll('.star').forEach(star => {
+    star.addEventListener('click', function() {
+      setStarRating(containerId, parseInt(this.dataset.value));
+    });
+    star.addEventListener('mouseover', function() {
+      highlightStars(containerId, parseInt(this.dataset.value));
+    });
+  });
+  container.addEventListener('mouseleave', function() {
+    highlightStars(containerId, parseInt(container.dataset.selected || '0'));
+  });
+}
+
+function setStarRating(containerId, value) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.dataset.selected = value;
+  highlightStars(containerId, value);
+}
+
+function highlightStars(containerId, value) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.querySelectorAll('.star').forEach(star => {
+    star.classList.toggle('active', parseInt(star.dataset.value) <= value);
+  });
+}
+
+function getSelectedQuality(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return null;
+  const val = parseInt(container.dataset.selected || '0');
+  return val > 0 ? val : null;
+}
+
+//  Sleep Toggle 
 
 function updateSleepButton() {
-  const btn  = document.getElementById('sleep-btn');
-  const icon = document.getElementById('sleep-btn-icon');
-  const text = document.getElementById('sleep-btn-text');
+  const btn          = document.getElementById('sleep-btn');
+  const icon         = document.getElementById('sleep-btn-icon');
+  const text         = document.getElementById('sleep-btn-text');
+  const qualityPicker = document.getElementById('sleep-quality-picker');
   if (!btn) return;
 
   const open = getOpenSleepEntry();
+
   if (open) {
-    btn.className = 'sleep-btn sleep-btn--wake';
+    btn.className  = 'sleep-btn sleep-btn--wake';
     icon.className = 'fas fa-sun me-2';
     text.textContent = 'Log Wake Time';
+    if (qualityPicker) qualityPicker.style.display = 'block';
   } else {
-    btn.className = 'sleep-btn sleep-btn--bedtime';
+    btn.className  = 'sleep-btn sleep-btn--bedtime';
     icon.className = 'fas fa-moon me-2';
     text.textContent = 'Log Bedtime';
+    if (qualityPicker) qualityPicker.style.display = 'none';
   }
+  updateSleepEndRowVisibility();
 }
 
 function handleSleepToggle() {
   const open     = getOpenSleepEntry();
-  const time     = getLogTime();
   const feedback = document.getElementById('log-feedback');
+  const toggle   = document.getElementById('manual-time-toggle');
+  const isManual = toggle && toggle.checked;
 
   if (open) {
-    logSleepEnd(time);
+    // Logging wake time
+    const wakeTime = isManual
+      ? (getSleepManualEnd() || getSleepManualStart())
+      : new Date().toISOString();
+    const quality = getSelectedQuality('sleep-stars');
+    logSleepEnd(wakeTime, quality);
+    setStarRating('sleep-stars', 0);
     if (feedback) {
       feedback.textContent = 'Wake time logged!';
       feedback.style.color = '#d4b85a';
       setTimeout(() => feedback.textContent = '', 2000);
     }
   } else {
-    logSleepStart(time);
+    // Logging bedtime
+    const startTime = isManual ? getSleepManualStart() : new Date().toISOString();
+    logSleepStart(startTime);
+
+    // Manual mode with end time: complete the session immediately
+    if (isManual && getSleepManualEnd()) {
+      const quality = getSelectedQuality('sleep-stars');
+      logSleepEnd(getSleepManualEnd(), quality);
+      setStarRating('sleep-stars', 0);
+      if (feedback) {
+        feedback.textContent = 'Sleep logged!';
+        feedback.style.color = '#7b9cff';
+        setTimeout(() => feedback.textContent = '', 2000);
+      }
+      updateSleepButton();
+      return;
+    }
+
     if (feedback) {
       feedback.textContent = 'Bedtime logged!';
       feedback.style.color = '#7b9cff';
@@ -111,7 +226,7 @@ function handleSleepToggle() {
   updateSleepButton();
 }
 
-// ── Settings ──────────────────────────────────────────────────────────────
+// Settings 
 
 function renderSettings() {
   const list = document.getElementById('settings-activity-list');
@@ -180,7 +295,7 @@ function onRecurringTimeChange(activityId) {
   }
 }
 
-// ── Calendar ──────────────────────────────────────────────────────────────
+// Calendar 
 
 function initCalendar() {
   $('#calendar').fullCalendar({
@@ -192,7 +307,10 @@ function initCalendar() {
     height: window.innerHeight - 70,
     defaultView: 'month',
     timezone: 'local',
-    eventSources: [local_event_source()]
+    eventSources: [local_event_source()],
+    eventClick: function(calEvent) {
+      openEditModal(calEvent);
+    }
   });
   window.addEventListener('resize', function() {
     $('#calendar').fullCalendar('option', 'height', window.innerHeight - 70);
@@ -200,12 +318,70 @@ function initCalendar() {
   calendarInitialised = true;
 }
 
-// ── Nav ───────────────────────────────────────────────────────────────────
+// Calendar Edit Modal 
+
+function openEditModal(calEvent) {
+  const entry = getLogs().find(e => e.id == calEvent.id);
+  if (!entry) return;
+
+  editingEntryId = entry.id;
+  document.getElementById('edit-modal-title').textContent = entry.activity;
+  document.getElementById('edit-start').value = toDatetimeLocal(entry.start);
+  document.getElementById('edit-end').value   = toDatetimeLocal(entry.end);
+
+  const qualityRow = document.getElementById('edit-quality-row');
+  if (entry.type === 'sleep') {
+    qualityRow.style.display = 'block';
+    setStarRating('edit-stars', entry.quality || 0);
+  } else {
+    qualityRow.style.display = 'none';
+  }
+
+  document.getElementById('edit-modal').style.display = 'flex';
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal').style.display = 'none';
+  editingEntryId = null;
+}
+
+function saveEditModal() {
+  if (editingEntryId === null) return;
+  const startVal = document.getElementById('edit-start').value;
+  const endVal   = document.getElementById('edit-end').value;
+
+  const fields = {
+    start: startVal ? new Date(startVal).toISOString() : undefined,
+    end:   endVal   ? new Date(endVal).toISOString()   : null
+  };
+
+  const entry = getLogs().find(e => e.id === editingEntryId);
+  if (entry && entry.type === 'sleep') {
+    fields.quality = getSelectedQuality('edit-stars');
+  }
+
+  updateEntry(editingEntryId, fields);
+  closeEditModal();
+}
+
+function deleteEditModal() {
+  if (editingEntryId === null) return;
+  removeEntry(editingEntryId);
+  closeEditModal();
+}
+
+// Nav 
 
 document.addEventListener("DOMContentLoaded", () => {
   renderActivityGrid();
   renderSettings();
   updateSleepButton();
+  initStarRating('sleep-stars');
+  initStarRating('edit-stars');
+
+  document.getElementById('edit-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeEditModal();
+  });
 
   document.querySelectorAll("nav ul li").forEach(item => {
     item.addEventListener("click", () => {

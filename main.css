@@ -1,4 +1,4 @@
-/*=============== GOOGLE FONTS ===============*/
+/* GOOGLE FONTS */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 
 :root {
@@ -18,7 +18,7 @@ body {
   padding-bottom: var(--nav-height);
 }
 
-/*=============== PAGES ===============*/
+/* PAGES */
 .content {
   display: none;
   min-height: calc(100vh - var(--nav-height));
@@ -37,7 +37,7 @@ body {
   margin-bottom: 6px;
 }
 
-/*=============== NAV ===============*/
+/* NAV */
 nav {
   position: fixed;
   bottom: 0;
@@ -84,7 +84,7 @@ nav ul li.active {
   font-weight: 900;
 }
 
-/*=============== TIME TOGGLE ===============*/
+/* TIME TOGGLE */
 .time-toggle-row {
   display: flex;
   align-items: center;
@@ -117,7 +117,7 @@ nav ul li.active {
   text-align: center;
 }
 
-/*=============== TOGGLE SWITCH ===============*/
+/* TOGGLE SWITCH */
 .toggle-switch {
   position: relative;
   display: inline-block;
@@ -176,7 +176,7 @@ nav ul li.active {
   transform: translateX(16px);
 }
 
-/*=============== ACTIVITY CARDS ===============*/
+/* ACTIVITY CARDS */
 .radioBtn {
   display: none;
 }
@@ -238,7 +238,7 @@ nav ul li.active {
   padding: 24px 0;
 }
 
-/*=============== SLEEP BUTTON ===============*/
+/* SLEEP BUTTON */
 .sleep-btn {
   display: block;
   width: 100%;
@@ -274,7 +274,7 @@ nav ul li.active {
   background-color: #fde68a;
 }
 
-/*=============== LOG BUTTON ===============*/
+/* LOG BUTTON */
 .log-btn {
   background-color: var(--phone-color);
   color: var(--accent-color);
@@ -304,7 +304,7 @@ nav ul li.active {
   letter-spacing: 0.03em;
 }
 
-/*=============== ACTIVITY LOG TABLE ===============*/
+/* ACTIVITY LOG TABLE */
 .log-section {
   padding: 0 0 8px;
 }
@@ -366,7 +366,7 @@ nav ul li.active {
   margin-left: 4px;
 }
 
-/*=============== DELETE / CLEAR BUTTONS ===============*/
+/* DELETE / CLEAR BUTTONS */
 .delete-btn {
   background: none;
   border: none;
@@ -399,7 +399,7 @@ nav ul li.active {
   color: #e07070;
 }
 
-/*=============== EMPTY STATE ===============*/
+/* EMPTY STATE */
 .empty-state {
   text-align: center;
   color: #bbb;
@@ -407,7 +407,7 @@ nav ul li.active {
   margin-top: 60px;
 }
 
-/*=============== CALENDAR PAGE ===============*/
+/* CALENDAR PAGE */
 #page-blog {
   height: calc(100vh - var(--nav-height));
   overflow: hidden;
@@ -446,7 +446,7 @@ nav ul li.active {
   font-weight: 700;
 }
 
-/*=============== SETTINGS ===============*/
+/* SETTINGS */
 .settings-section {
   background: #fff;
   border-radius: 14px;
@@ -535,7 +535,7 @@ nav ul li.active {
 }
 
 
-/*=============== PWA INSTaLLER ===============*/
+/* PWA INSTaLLER */
 
 #installInstructions {
    display: none
@@ -544,4 +544,125 @@ nav ul li.active {
    #installInstructions {
      display: block
    }
+}
+/* MANUAL TIME ROWS */
+.manual-time-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.manual-time-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #888;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  width: 34px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.manual-time-row .datetime-input {
+  flex: 1;
+  margin: 0;
+  max-width: unset;
+}
+
+/* STAR RATING */
+.star-rating {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+.star {
+  font-size: 32px;
+  color: #ddd;
+  cursor: pointer;
+  transition: color 0.12s ease;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.star.active {
+  color: #f5c542;
+}
+
+/* SLEEP QUALITY PICKER */
+.sleep-quality-picker {
+  text-align: center;
+  padding: 8px 0 2px;
+}
+
+.quality-prompt {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #888;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.quality-badge {
+  display: inline-block;
+  font-size: 11px;
+  color: #f5c542;
+  margin-left: 4px;
+  vertical-align: middle;
+  letter-spacing: 1px;
+}
+
+/* EDIT MODAL */
+.edit-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.edit-modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px 20px 20px;
+  width: 100%;
+  max-width: 340px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+
+.edit-modal-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--phone-color);
+  letter-spacing: 0.04em;
+  margin: 0 0 16px;
+  text-align: center;
+}
+
+.edit-modal-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-modal-body .manual-time-row {
+  max-width: 100%;
+}
+
+.edit-modal-footer {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.delete-modal-btn:hover {
+  border-color: #e07070 !important;
+  color: #e07070 !important;
 }

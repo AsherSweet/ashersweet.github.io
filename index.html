@@ -39,7 +39,14 @@
         <span class="time-toggle-hint">Manual</span>
       </div>
       <div id="manual-time-picker" style="display:none;">
-        <input type="datetime-local" id="manual-datetime" class="datetime-input" />
+        <div class="manual-time-row mt-1">
+          <span class="manual-time-label">Start</span>
+          <input type="datetime-local" id="manual-datetime" class="datetime-input" />
+        </div>
+        <div class="manual-time-row mt-1">
+          <span class="manual-time-label">End</span>
+          <input type="datetime-local" id="manual-datetime-end" class="datetime-input" />
+        </div>
       </div>
 
       <!-- Activity Grid -->
@@ -53,6 +60,26 @@
           <i class="fas fa-moon me-2" id="sleep-btn-icon"></i>
           <span id="sleep-btn-text">Log Bedtime</span>
         </button>
+        <div id="sleep-manual-times" style="display:none;" class="mt-2">
+          <div class="manual-time-row">
+            <span class="manual-time-label">Start</span>
+            <input type="datetime-local" id="sleep-start" class="datetime-input" />
+          </div>
+          <div class="manual-time-row mt-1" id="sleep-end-row">
+            <span class="manual-time-label">End</span>
+            <input type="datetime-local" id="sleep-end" class="datetime-input" />
+          </div>
+        </div>
+        <div id="sleep-quality-picker" style="display:none;" class="sleep-quality-picker mt-2">
+          <p class="quality-prompt">How was your sleep?</p>
+          <div class="star-rating" id="sleep-stars">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+          </div>
+        </div>
       </div>
 
       <!-- Log Button -->
@@ -86,6 +113,7 @@
     </div>
   </div>
   <button id="install" hidden>Install</button>
+
   <!-- Calendar -->
   <div class="content" id="page-blog">
     <div id="calendar"></div>
@@ -109,6 +137,38 @@
           <i class="fas fa-moon me-2"></i>Sleep Tracking
         </h2>
         <p class="settings-hint">The Sleep button toggles between logging your bedtime and wake time. Your sleep duration appears as a block on your calendar. Short sleeps appear as naps.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calendar Edit Modal -->
+  <div id="edit-modal" class="edit-modal-overlay" style="display:none;">
+    <div class="edit-modal">
+      <h3 id="edit-modal-title" class="edit-modal-title"></h3>
+      <div class="edit-modal-body">
+        <div class="manual-time-row">
+          <span class="manual-time-label">Start</span>
+          <input type="datetime-local" id="edit-start" class="datetime-input" />
+        </div>
+        <div class="manual-time-row mt-2">
+          <span class="manual-time-label">End</span>
+          <input type="datetime-local" id="edit-end" class="datetime-input" />
+        </div>
+        <div id="edit-quality-row" style="display:none;" class="mt-3">
+          <p class="quality-prompt">Sleep Quality</p>
+          <div class="star-rating" id="edit-stars">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+          </div>
+        </div>
+      </div>
+      <div class="edit-modal-footer">
+        <button onclick="saveEditModal()" class="log-btn">Save</button>
+        <button onclick="deleteEditModal()" class="clear-btn delete-modal-btn">Delete</button>
+        <button onclick="closeEditModal()" class="clear-btn">Cancel</button>
       </div>
     </div>
   </div>
