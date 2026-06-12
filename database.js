@@ -46,7 +46,7 @@ function toggleActivity(activityId) {
   saveSettings(settings);
 }
 
-//  Recurring ─
+//  Recurring
 
 function setRecurring(activityId, time) {
   const settings = getSettings();
@@ -182,7 +182,7 @@ function updateEntry(id, fields) {
   renderLog();
 }
 
-//  Sleep ─
+//  Sleep 
 
 function getOpenSleepEntry() {
   return loadDatabase().find(e => e.type === 'sleep' && !e.end) || null;
@@ -216,7 +216,7 @@ function logSleepEnd(endTime, quality) {
   return open;
 }
 
-//  Utilities ─
+//  Utilities 
 
 function getRandomColour() {
   const letters = '0123456789ABCDEF';
