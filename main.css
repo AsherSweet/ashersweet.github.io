@@ -1,10 +1,49 @@
-/*=============== GOOGLE FONTS ===============*/
+/* GOOGLE FONTS */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 
 :root {
-  --phone-color: #444252;
-  --accent-color: #c7b0c3;
-  --nav-height: 70px;
+  --phone-color:     #444252;
+  --accent-color:    #c7b0c3;
+  --nav-height:      70px;
+
+  --body-bg:         #eee;
+  --card-bg:         #fff;
+  --card-border:     #e5e5e5;
+  --input-bg:        #fff;
+  --nav-bg:          #fff;
+  --nav-shadow:      0 -2px 8px rgba(0,0,0,0.08);
+  --muted:           #888;
+  --text-main:       #444;
+  --table-alt:       #f5f5f5;
+  --table-border:    #ddd;
+  --settings-bg:     #fff;
+  --settings-border: #f0eef0;
+  --recurring-bg:    #f9f6f9;
+  --modal-overlay:   rgba(0,0,0,0.45);
+  --modal-bg:        #fff;
+  --clear-btn-border:#ddd;
+  --clear-btn-color: #999;
+}
+
+[data-bs-theme="dark"] {
+  --phone-color:     #c8c0d4;
+  --body-bg:         #16151e;
+  --card-bg:         #1e1d2a;
+  --card-border:     #35334a;
+  --input-bg:        #26243a;
+  --nav-bg:          #1a1926;
+  --nav-shadow:      0 -2px 8px rgba(0,0,0,0.4);
+  --muted:           #8a8a9a;
+  --text-main:       #c0bccb;
+  --table-alt:       #242233;
+  --table-border:    #35334a;
+  --settings-bg:     #1e1d2a;
+  --settings-border: #2e2c3f;
+  --recurring-bg:    #26243a;
+  --modal-overlay:   rgba(0,0,0,0.65);
+  --modal-bg:        #1e1d2a;
+  --clear-btn-border:#35334a;
+  --clear-btn-color: #8a8a9a;
 }
 
 * {
@@ -12,13 +51,13 @@
 }
 
 body {
-  background-color: #eee;
+  background-color: var(--body-bg);
   font-family: "Montserrat", sans-serif;
   margin: 0;
   padding-bottom: var(--nav-height);
 }
 
-/*=============== PAGES ===============*/
+/* PAGES */
 .content {
   display: none;
   min-height: calc(100vh - var(--nav-height));
@@ -37,7 +76,7 @@ body {
   margin-bottom: 6px;
 }
 
-/*=============== NAV ===============*/
+/* NAV */
 nav {
   position: fixed;
   bottom: 0;
@@ -47,17 +86,17 @@ nav {
 }
 
 nav ul {
-  background-color: #fff;
+  background-color: var(--nav-bg);
   display: flex;
   list-style-type: none;
   padding: 0;
   margin: 0;
   height: var(--nav-height);
-  box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+  box-shadow: var(--nav-shadow);
 }
 
 nav li {
-  color: #777;
+  color: var(--muted);
   cursor: pointer;
   flex: 1;
   padding: 10px 4px;
@@ -84,7 +123,7 @@ nav ul li.active {
   font-weight: 900;
 }
 
-/*=============== TIME TOGGLE ===============*/
+/* TIME TOGGLE */
 .time-toggle-row {
   display: flex;
   align-items: center;
@@ -112,12 +151,12 @@ nav ul li.active {
   font-weight: 600;
   border: 2px solid var(--accent-color);
   border-radius: 10px;
-  background: #fff;
+  background: var(--input-bg);
   color: var(--phone-color);
   text-align: center;
 }
 
-/*=============== TOGGLE SWITCH ===============*/
+/* TOGGLE SWITCH */
 .toggle-switch {
   position: relative;
   display: inline-block;
@@ -176,7 +215,7 @@ nav ul li.active {
   transform: translateX(16px);
 }
 
-/*=============== ACTIVITY CARDS ===============*/
+/* ACTIVITY CARDS */
 .radioBtn {
   display: none;
 }
@@ -186,8 +225,8 @@ nav ul li.active {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #fff;
-  border: 2px solid #e5e5e5;
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
   border-radius: 12px;
   padding: 12px 6px 10px;
   cursor: pointer;
@@ -233,12 +272,12 @@ nav ul li.active {
 
 .no-activities-msg {
   text-align: center;
-  color: #aaa;
+  color: var(--muted);
   font-size: 13px;
   padding: 24px 0;
 }
 
-/*=============== SLEEP BUTTON ===============*/
+/* SLEEP BUTTON */
 .sleep-btn {
   display: block;
   width: 100%;
@@ -274,7 +313,7 @@ nav ul li.active {
   background-color: #fde68a;
 }
 
-/*=============== LOG BUTTON ===============*/
+/* LOG BUTTON */
 .log-btn {
   background-color: var(--phone-color);
   color: var(--accent-color);
@@ -304,7 +343,7 @@ nav ul li.active {
   letter-spacing: 0.03em;
 }
 
-/*=============== ACTIVITY LOG TABLE ===============*/
+/* ACTIVITY LOG TABLE */
 .log-section {
   padding: 0 0 8px;
 }
@@ -325,12 +364,12 @@ nav ul li.active {
 
 .log-table td {
   padding: 6px 12px;
-  border-bottom: 1px solid #ddd;
-  color: #444;
+  border-bottom: 1px solid var(--table-border);
+  color: var(--text-main);
 }
 
 .log-table tr:nth-child(even) td {
-  background-color: #f5f5f5;
+  background-color: var(--table-alt);
 }
 
 .log-table th:last-child,
@@ -366,7 +405,7 @@ nav ul li.active {
   margin-left: 4px;
 }
 
-/*=============== DELETE / CLEAR BUTTONS ===============*/
+/* DELETE / CLEAR BUTTONS */
 .delete-btn {
   background: none;
   border: none;
@@ -383,9 +422,9 @@ nav ul li.active {
 
 .clear-btn {
   background: none;
-  border: 1px solid #ddd;
+  border: 1px solid var(--clear-btn-border);
   border-radius: 20px;
-  color: #999;
+  color: var(--clear-btn-color);
   font-family: "Montserrat", sans-serif;
   font-size: 12px;
   font-weight: 600;
@@ -399,15 +438,15 @@ nav ul li.active {
   color: #e07070;
 }
 
-/*=============== EMPTY STATE ===============*/
+/* EMPTY STATE */
 .empty-state {
   text-align: center;
-  color: #bbb;
+  color: var(--muted);
   font-size: 13px;
   margin-top: 60px;
 }
 
-/*=============== CALENDAR PAGE ===============*/
+/* CALENDAR PAGE */
 #page-blog {
   height: calc(100vh - var(--nav-height));
   overflow: hidden;
@@ -446,9 +485,9 @@ nav ul li.active {
   font-weight: 700;
 }
 
-/*=============== SETTINGS ===============*/
+/* SETTINGS */
 .settings-section {
-  background: #fff;
+  background: var(--settings-bg);
   border-radius: 14px;
   padding: 16px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
@@ -535,7 +574,7 @@ nav ul li.active {
 }
 
 
-/*=============== PWA INSTaLLER ===============*/
+/* PWA INSTaLLER */
 
 #installInstructions {
    display: none
@@ -545,7 +584,7 @@ nav ul li.active {
      display: block
    }
 }
-/*=============== MANUAL TIME ROWS ===============*/
+/* MANUAL TIME ROWS */
 .manual-time-row {
   display: flex;
   align-items: center;
@@ -571,7 +610,7 @@ nav ul li.active {
   max-width: unset;
 }
 
-/*=============== STAR RATING ===============*/
+/* STAR RATING */
 .star-rating {
   display: flex;
   gap: 4px;
@@ -591,7 +630,7 @@ nav ul li.active {
   color: #f5c542;
 }
 
-/*=============== SLEEP QUALITY PICKER ===============*/
+/* SLEEP QUALITY PICKER */
 .sleep-quality-picker {
   text-align: center;
   padding: 8px 0 2px;
@@ -615,7 +654,7 @@ nav ul li.active {
   letter-spacing: 1px;
 }
 
-/*=============== EDIT MODAL ===============*/
+/* EDIT MODAL */
 .edit-modal-overlay {
   position: fixed;
   inset: 0;
@@ -667,7 +706,7 @@ nav ul li.active {
   color: #e07070 !important;
 }
 
-/*=============== MANUAL TIME ROWS ===============*/
+/* MANUAL TIME ROWS */
 .manual-time-row {
   display: flex;
   align-items: center;
@@ -693,7 +732,7 @@ nav ul li.active {
   max-width: unset;
 }
 
-/*=============== SLEEP BUTTON MANUAL MODE ===============*/
+/* SLEEP BUTTON MANUAL MODE */
 .sleep-btn {
   position: relative;
 }
@@ -727,7 +766,7 @@ nav ul li.active {
 .sleep-btn--bedtime #sleep-icon-sun,
 .sleep-btn--wake #sleep-icon-moon { display: none; }
 
-/*=============== STAR RATING ===============*/
+/* STAR RATING */
 .star-rating {
   display: flex;
   gap: 4px;
@@ -747,7 +786,7 @@ nav ul li.active {
   color: #f5c542;
 }
 
-/*=============== SLEEP QUALITY PICKER ===============*/
+/* SLEEP QUALITY PICKER */
 .sleep-quality-picker {
   text-align: center;
   padding: 8px 0 2px;
@@ -792,7 +831,7 @@ nav ul li.active {
   letter-spacing: 1px;
 }
 
-/*=============== EDIT MODAL ===============*/
+/* EDIT MODAL */
 .edit-modal-overlay {
   position: fixed;
   inset: 0;
@@ -842,141 +881,4 @@ nav ul li.active {
 .delete-modal-btn:hover {
   border-color: #e07070 !important;
   color: #e07070 !important;
-}
-
-/*=============== DARK MODE ===============*/
-body.dark-mode {
-  background-color: #1a1a2e;
-  color: #d0cce8;
-}
-
-body.dark-mode .page-title {
-  color: #d0cce8;
-}
-
-body.dark-mode nav ul {
-  background-color: #1e1e38;
-  box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
-}
-
-body.dark-mode nav li {
-  color: #7070a0;
-}
-
-body.dark-mode nav ul li:hover,
-body.dark-mode nav ul li.active {
-  color: var(--accent-color);
-}
-
-body.dark-mode .radioBtn + label {
-  background: #252540;
-  border-color: #3a3a5e;
-}
-
-body.dark-mode .radioBtn:checked + label {
-  background: #2e2e50;
-  border-color: var(--accent-color);
-}
-
-body.dark-mode .activity-label {
-  color: #d0cce8;
-}
-
-body.dark-mode .time-toggle-label,
-body.dark-mode .time-toggle-hint {
-  color: #7070a0;
-}
-
-body.dark-mode .datetime-input {
-  background: #252540;
-  border-color: var(--accent-color);
-  color: #d0cce8;
-}
-
-body.dark-mode .manual-time-label {
-  color: #7070a0;
-}
-
-body.dark-mode .settings-section {
-  background: #252540;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-}
-
-body.dark-mode .settings-section-title {
-  color: #d0cce8;
-}
-
-body.dark-mode .settings-hint {
-  color: #7070a0;
-}
-
-body.dark-mode .activity-setting-row {
-  border-bottom-color: #2e2e50;
-}
-
-body.dark-mode .activity-setting-name {
-  color: #d0cce8;
-}
-
-body.dark-mode .log-table th {
-  background-color: #252540;
-  color: var(--accent-color);
-}
-
-body.dark-mode .log-table td {
-  color: #d0cce8;
-  border-bottom-color: #3a3a5e;
-}
-
-body.dark-mode .log-table tr:nth-child(even) td {
-  background-color: #1e1e38;
-}
-
-body.dark-mode .empty-state {
-  color: #5050708;
-}
-
-body.dark-mode .clear-btn {
-  border-color: #3a3a5e;
-  color: #7070a0;
-}
-
-body.dark-mode .clear-btn:hover {
-  border-color: #e07070;
-  color: #e07070;
-}
-
-body.dark-mode .edit-modal {
-  background: #252540;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-}
-
-body.dark-mode .edit-modal-title {
-  color: #d0cce8;
-}
-
-body.dark-mode .quality-prompt {
-  color: #7070a0;
-}
-
-body.dark-mode .star {
-  color: #3a3a5e;
-}
-
-body.dark-mode .star.active {
-  color: #f5c542;
-}
-
-body.dark-mode .log-btn {
-  background-color: #252540;
-}
-
-body.dark-mode .quality-confirm-btn {
-  background-color: #252540;
-}
-
-body.dark-mode .recurring-time-input {
-  background: #1e1e38;
-  border-color: #3a3a5e;
-  color: #d0cce8;
 }

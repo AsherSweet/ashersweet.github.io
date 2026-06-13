@@ -3,7 +3,7 @@ var editingEntryId = null;
 var lastClosedSleepId = null;
 var sleepSelectedInManual = false;
 
-//  Helpers ─
+//  Helpers 
 
 function toDatetimeLocal(iso) {
   if (!iso) return '';
@@ -19,7 +19,7 @@ function showFeedback(el, msg, color) {
   setTimeout(() => el.textContent = '', 2000);
 }
 
-//  Time Toggle ─
+//  Time Toggle 
 
 function handleTimeToggle(checkbox) {
   const picker   = document.getElementById('manual-time-picker');
@@ -55,7 +55,7 @@ function getLogEndTime() {
   return null;
 }
 
-//  Activity Grid ─
+//  Activity Grid 
 
 function renderActivityGrid() {
   const grid = document.getElementById('activity-grid');
@@ -113,7 +113,7 @@ function handleLog() {
   showFeedback(feedback, `"${selected.value}" logged!`, 'var(--accent-color)');
 }
 
-//  Star Rating ─
+//  Star Rating 
 
 function initStarRating(containerId) {
   const container = document.getElementById(containerId);
@@ -255,10 +255,10 @@ function closeSleepQualityModal() {
   finishSleepLog(null);
 }
 
-//  Dark Mode ─
+//  Dark Mode 
 
 function toggleDarkMode(checkbox) {
-  document.body.classList.toggle('dark-mode', checkbox.checked);
+  document.documentElement.setAttribute('data-bs-theme', checkbox.checked ? 'dark' : 'light');
   localStorage.setItem('darkMode', checkbox.checked ? '1' : '0');
 }
 
@@ -351,7 +351,7 @@ function initCalendar() {
   calendarInitialised = true;
 }
 
-//  Calendar Edit Modal ─
+//  Calendar Edit Modal 
 
 function openEditModal(calEvent) {
   const entry = getLogs().find(e => e.id == calEvent.id);
@@ -397,12 +397,12 @@ function deleteEditModal() {
   closeEditModal();
 }
 
-//  Nav ─
+//  Nav 
 
 document.addEventListener("DOMContentLoaded", () => {
   // Restore dark mode
   if (localStorage.getItem('darkMode') === '1') {
-    document.body.classList.add('dark-mode');
+    document.documentElement.setAttribute('data-bs-theme', 'dark');
     const toggle = document.getElementById('dark-mode-toggle');
     if (toggle) toggle.checked = true;
   }
