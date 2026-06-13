@@ -3,7 +3,7 @@ var editingEntryId = null;
 var lastClosedSleepId = null;
 var sleepSelectedInManual = false;
 
-// ── Helpers ───────────────────────────────────────────────────────────────
+//  Helpers ─
 
 function toDatetimeLocal(iso) {
   if (!iso) return '';
@@ -19,7 +19,7 @@ function showFeedback(el, msg, color) {
   setTimeout(() => el.textContent = '', 2000);
 }
 
-// ── Time Toggle ───────────────────────────────────────────────────────────
+//  Time Toggle ─
 
 function handleTimeToggle(checkbox) {
   const picker   = document.getElementById('manual-time-picker');
@@ -55,7 +55,7 @@ function getLogEndTime() {
   return null;
 }
 
-// ── Activity Grid ─────────────────────────────────────────────────────────
+//  Activity Grid ─
 
 function renderActivityGrid() {
   const grid = document.getElementById('activity-grid');
@@ -86,7 +86,7 @@ function renderActivityGrid() {
   });
 }
 
-// ── Log Activity ──────────────────────────────────────────────────────────
+//  Log Activity 
 
 function handleLog() {
   const selected = document.querySelector('.radioBtn:checked');
@@ -113,7 +113,7 @@ function handleLog() {
   showFeedback(feedback, `"${selected.value}" logged!`, 'var(--accent-color)');
 }
 
-// ── Star Rating ───────────────────────────────────────────────────────────
+//  Star Rating ─
 
 function initStarRating(containerId) {
   const container = document.getElementById(containerId);
@@ -153,7 +153,7 @@ function getSelectedQuality(containerId) {
   return val > 0 ? val : null;
 }
 
-// ── Sleep Toggle ──────────────────────────────────────────────────────────
+//  Sleep Toggle 
 
 function updateSleepButton() {
   const btn      = document.getElementById('sleep-btn');
@@ -255,14 +255,14 @@ function closeSleepQualityModal() {
   finishSleepLog(null);
 }
 
-// ── Dark Mode ─────────────────────────────────────────────────────────────
+//  Dark Mode ─
 
 function toggleDarkMode(checkbox) {
   document.body.classList.toggle('dark-mode', checkbox.checked);
   localStorage.setItem('darkMode', checkbox.checked ? '1' : '0');
 }
 
-// ── Settings ──────────────────────────────────────────────────────────────
+//  Settings 
 
 function renderSettings() {
   const list = document.getElementById('settings-activity-list');
@@ -328,7 +328,7 @@ function onRecurringTimeChange(activityId) {
   }
 }
 
-// ── Calendar ──────────────────────────────────────────────────────────────
+//  Calendar 
 
 function initCalendar() {
   $('#calendar').fullCalendar({
@@ -351,7 +351,7 @@ function initCalendar() {
   calendarInitialised = true;
 }
 
-// ── Calendar Edit Modal ───────────────────────────────────────────────────
+//  Calendar Edit Modal ─
 
 function openEditModal(calEvent) {
   const entry = getLogs().find(e => e.id == calEvent.id);
@@ -397,7 +397,7 @@ function deleteEditModal() {
   closeEditModal();
 }
 
-// ── Nav ───────────────────────────────────────────────────────────────────
+//  Nav ─
 
 document.addEventListener("DOMContentLoaded", () => {
   // Restore dark mode
