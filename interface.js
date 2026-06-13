@@ -1,8 +1,9 @@
 var calendarInitialised = false;
 var editingEntryId = null;
 var lastClosedSleepId = null;
+var sleepSelectedInManual = false;
 
-//  Helpers 
+// ── Helpers ───────────────────────────────────────────────────────────────
 
 function toDatetimeLocal(iso) {
   if (!iso) return '';
@@ -18,7 +19,7 @@ function showFeedback(el, msg, color) {
   setTimeout(() => el.textContent = '', 2000);
 }
 
-//  Time Toggle 
+// ── Time Toggle ───────────────────────────────────────────────────────────
 
 function handleTimeToggle(checkbox) {
   const picker   = document.getElementById('manual-time-picker');
@@ -29,18 +30,9 @@ function handleTimeToggle(checkbox) {
     input.value    = toDatetimeLocal(new Date().toISOString());
     inputEnd.value = '';
     picker.style.display = 'block';
-    // Show quality picker for sleep rating in manual mode
-    const qualityPicker = document.getElementById('sleep-quality-picker');
-    const confirmBtn    = document.getElementById('quality-confirm-btn');
-    if (qualityPicker) qualityPicker.style.display = 'block';
-    if (confirmBtn)    confirmBtn.style.display    = 'none';
   } else {
     picker.style.display = 'none';
-    // Hide quality picker unless mid post-wake flow
-    if (!lastClosedSleepId) {
-      const qualityPicker = document.getElementById('sleep-quality-picker');
-      if (qualityPicker) qualityPicker.style.display = 'none';
-    }
+    sleepSelectedInManual = false;
   }
   updateSleepButton();
 }
@@ -63,7 +55,7 @@ function getLogEndTime() {
   return null;
 }
 
-//  Activity Grid 
+// ── Activity Grid ─────────────────────────────────────────────────────────
 
 function renderActivityGrid() {
   const grid = document.getElementById('activity-grid');
@@ -85,14 +77,32 @@ function renderActivityGrid() {
         <p class="activity-label mb-0">${activity.name}</p>
       </label>`;
     grid.appendChild(col);
-  });
+    col.querySelector('.radioBtn').addEventListener('change', function() {
+      if (this.checked && sleepSelectedInManual) {
+        sleepSelectedInManual = false;
+        updateSleepButton();
+      }
+    });
 }
 
-//  Log Activity 
+// ── Log Activity ──────────────────────────────────────────────────────────
 
 function handleLog() {
   const selected = document.querySelector('.radioBtn:checked');
   const feedback = document.getElementById('log-feedback');
+  const toggle   = document.getElementById('manual-time-toggle');
+  const isManual = toggle && toggle.checked;
+
+  if (isManual && sleepSelectedInManual) {
+    if (!getLogEndTime()) {
+      feedback.textContent = "Please set an end time for sleep.";
+      feedback.style.color = "#e07070";
+      return;
+    }
+    openSleepQualityModal('manual');
+    return;
+  }
+
   if (!selected) {
     feedback.textContent = "Please select an activity first.";
     feedback.style.color = "#e07070";
@@ -102,7 +112,7 @@ function handleLog() {
   showFeedback(feedback, `"${selected.value}" logged!`, 'var(--accent-color)');
 }
 
-//  Star Rating 
+// ── Star Rating ───────────────────────────────────────────────────────────
 
 function initStarRating(containerId) {
   const container = document.getElementById(containerId);
@@ -142,7 +152,7 @@ function getSelectedQuality(containerId) {
   return val > 0 ? val : null;
 }
 
-//  Sleep Toggle 
+// ── Sleep Toggle ──────────────────────────────────────────────────────────
 
 function updateSleepButton() {
   const btn      = document.getElementById('sleep-btn');
@@ -157,11 +167,11 @@ function updateSleepButton() {
   const open     = getOpenSleepEntry();
 
   if (isManual) {
-    btn.className       = 'sleep-btn sleep-btn--manual';
+    btn.className          = sleepSelectedInManual ? 'sleep-btn sleep-btn--manual-selected' : 'sleep-btn sleep-btn--manual-unselected';
     moonIcon.style.display = '';
     sunIcon.style.display  = '';
-    tick.style.display     = 'block';
-    text.textContent = 'Log Sleep';
+    tick.style.display     = sleepSelectedInManual ? 'block' : 'none';
+    text.textContent       = 'Sleep';
   } else if (open) {
     btn.className       = 'sleep-btn sleep-btn--wake';
     moonIcon.style.display = 'none';
@@ -184,16 +194,10 @@ function handleSleepToggle() {
   const open     = getOpenSleepEntry();
 
   if (isManual) {
-    const startTime = getLogTime();
-    const endTime   = getLogEndTime();
-    const quality   = getSelectedQuality('sleep-stars');
-    logSleepStart(startTime);
-    if (endTime) {
-      logSleepEnd(endTime, quality);
-      setStarRating('sleep-stars', 0);
-      showFeedback(feedback, 'Sleep logged!', '#7b9cff');
-    } else {
-      showFeedback(feedback, 'Bedtime logged!', '#7b9cff');
+    sleepSelectedInManual = !sleepSelectedInManual;
+    if (sleepSelectedInManual) {
+      const checked = document.querySelector('.radioBtn:checked');
+      if (checked) checked.checked = false;
     }
     updateSleepButton();
     return;
@@ -204,10 +208,7 @@ function handleSleepToggle() {
     lastClosedSleepId = open.id;
     logSleepEnd(new Date().toISOString(), null);
     showFeedback(feedback, 'Wake time logged!', '#d4b85a');
-    const picker     = document.getElementById('sleep-quality-picker');
-    const confirmBtn = document.getElementById('quality-confirm-btn');
-    if (picker)     picker.style.display     = 'block';
-    if (confirmBtn) confirmBtn.style.display = 'inline-block';
+    openSleepQualityModal('auto');
   } else {
     logSleepStart(new Date().toISOString());
     showFeedback(feedback, 'Bedtime logged!', '#7b9cff');
@@ -215,27 +216,45 @@ function handleSleepToggle() {
   updateSleepButton();
 }
 
-function confirmSleepQuality() {
-  const quality = getSelectedQuality('sleep-stars');
-  if (lastClosedSleepId !== null && quality !== null) {
-    updateEntry(lastClosedSleepId, { quality });
-  }
-  setStarRating('sleep-stars', 0);
-  lastClosedSleepId = null;
-  const picker     = document.getElementById('sleep-quality-picker');
-  const confirmBtn = document.getElementById('quality-confirm-btn');
-  if (picker)     picker.style.display     = 'none';
-  if (confirmBtn) confirmBtn.style.display = 'none';
+function openSleepQualityModal(context) {
+  document.getElementById('sleep-quality-modal').style.display = 'flex';
+  document.getElementById('quality-modal-context').value = context;
+  setStarRating('quality-modal-stars', 0);
 }
 
-//  Dark Mode 
+function finishSleepLog(quality) {
+  const context = document.getElementById('quality-modal-context').value;
+  if (context === 'auto') {
+    if (lastClosedSleepId !== null && quality !== null) {
+      updateEntry(lastClosedSleepId, { quality });
+    }
+    lastClosedSleepId = null;
+  } else {
+    logSleepStart(getLogTime());
+    logSleepEnd(getLogEndTime(), quality);
+    sleepSelectedInManual = false;
+    updateSleepButton();
+    showFeedback(document.getElementById('log-feedback'), 'Sleep logged!', '#7b9cff');
+  }
+  document.getElementById('sleep-quality-modal').style.display = 'none';
+}
+
+function confirmSleepQualityModal() {
+  finishSleepLog(getSelectedQuality('quality-modal-stars'));
+}
+
+function closeSleepQualityModal() {
+  finishSleepLog(null);
+}
+
+// ── Dark Mode ─────────────────────────────────────────────────────────────
 
 function toggleDarkMode(checkbox) {
   document.body.classList.toggle('dark-mode', checkbox.checked);
   localStorage.setItem('darkMode', checkbox.checked ? '1' : '0');
 }
 
-//  Settings 
+// ── Settings ──────────────────────────────────────────────────────────────
 
 function renderSettings() {
   const list = document.getElementById('settings-activity-list');
@@ -301,7 +320,7 @@ function onRecurringTimeChange(activityId) {
   }
 }
 
-//  Calendar 
+// ── Calendar ──────────────────────────────────────────────────────────────
 
 function initCalendar() {
   $('#calendar').fullCalendar({
@@ -324,7 +343,7 @@ function initCalendar() {
   calendarInitialised = true;
 }
 
-//  Calendar Edit Modal 
+// ── Calendar Edit Modal ───────────────────────────────────────────────────
 
 function openEditModal(calEvent) {
   const entry = getLogs().find(e => e.id == calEvent.id);
@@ -370,9 +389,10 @@ function deleteEditModal() {
   closeEditModal();
 }
 
-//  Nav 
+// ── Nav ───────────────────────────────────────────────────────────────────
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Restore dark mode
   if (localStorage.getItem('darkMode') === '1') {
     document.body.classList.add('dark-mode');
     const toggle = document.getElementById('dark-mode-toggle');
@@ -384,9 +404,13 @@ document.addEventListener("DOMContentLoaded", () => {
   updateSleepButton();
   initStarRating('sleep-stars');
   initStarRating('edit-stars');
+  initStarRating('quality-modal-stars');
 
   document.getElementById('edit-modal').addEventListener('click', function(e) {
     if (e.target === this) closeEditModal();
+  });
+  document.getElementById('sleep-quality-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeSleepQualityModal();
   });
 
   document.querySelectorAll("nav ul li").forEach(item => {

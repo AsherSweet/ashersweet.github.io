@@ -13,7 +13,7 @@ const DEFAULT_ACTIVITIES = [
   { id: 'water',      name: 'Water',      icon: 'fa-droplet',        color: '#5a9bd4' },
 ];
 
-//  Settings 
+//  Settings
 
 function getSettings() {
   try {
@@ -155,6 +155,10 @@ function saveDatabase(data) {
   _refreshCalendar();
 }
 
+
+// The big funky for all the activities. Needs to be adapted to allow universal pass through from 
+// handleLog() in interface.js
+
 function activityLog(activityName, logTime, endTime) {
   const db = loadDatabase();
   const activityDef = DEFAULT_ACTIVITIES.find(a => a.name === activityName || a.id === activityName);
@@ -238,7 +242,7 @@ function clearAllLogs() {
   saveDatabase([]);
   renderLog();
 }
-
+// Log Section
 function renderLog() {
   const tbody = document.getElementById("log-body");
   const logSection = document.getElementById("log-section");
