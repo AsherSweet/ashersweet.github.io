@@ -156,25 +156,31 @@ function saveDatabase(data) {
 }
 
 
-// The big funky for all the activities. Needs to be adapted to allow universal pass through from 
-// handleLog() in interface.js
+// Universal entry creation — handles both regular activities and sleep sessions.
+// Call this from anywhere instead of activityLog / logSleepStart.
 
-function activityLog(activityName, logTime, endTime) {
-  const db = loadDatabase();
-  const activityDef = DEFAULT_ACTIVITIES.find(a => a.name === activityName || a.id === activityName);
+function logEntry({ activity, activityId, start, end, type, colour, quality, recurring } = {}) {
+  const db  = loadDatabase();
+  const def = DEFAULT_ACTIVITIES.find(a => a.name === activity || a.id === activity || a.id === activityId);
   const entry = {
-    id: db.length ? Math.max(...db.map(e => e.id)) + 1 : 1,
-    activity: activityDef ? activityDef.name : activityName,
-    activityId: activityDef ? activityDef.id : activityName.toLowerCase(),
-    start: logTime || new Date().toISOString(),
-    end: endTime || null,
-    type: 'regular',
-    colour: activityDef ? activityDef.color : getRandomColour()
+    id:         db.length ? Math.max(...db.map(e => e.id)) + 1 : 1,
+    activity:   def ? def.name  : activity,
+    activityId: def ? def.id    : (activityId || (activity || '').toLowerCase()),
+    start:      start  || new Date().toISOString(),
+    end:        end    || null,
+    type:       type   || 'regular',
+    colour:     colour || (def ? def.color : getRandomColour())
   };
+  if (quality  != null) entry.quality  = quality;
+  if (recurring      ) entry.recurring = true;
   db.push(entry);
   saveDatabase(db);
   renderLog();
   return entry;
+}
+
+function activityLog(activityName, logTime, endTime) {
+  return logEntry({ activity: activityName, start: logTime, end: endTime, type: 'regular' });
 }
 
 function updateEntry(id, fields) {
@@ -193,20 +199,7 @@ function getOpenSleepEntry() {
 }
 
 function logSleepStart(startTime) {
-  const db = loadDatabase();
-  const entry = {
-    id: db.length ? Math.max(...db.map(e => e.id)) + 1 : 1,
-    activity: 'Sleep',
-    activityId: 'sleep',
-    start: startTime || new Date().toISOString(),
-    end: null,
-    type: 'sleep',
-    colour: '#7b9cff'
-  };
-  db.push(entry);
-  saveDatabase(db);
-  renderLog();
-  return entry;
+  return logEntry({ activity: 'Sleep', activityId: 'sleep', start: startTime, type: 'sleep', colour: '#7b9cff' });
 }
 
 function logSleepEnd(endTime, quality) {

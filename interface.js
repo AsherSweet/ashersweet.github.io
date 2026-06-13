@@ -83,6 +83,7 @@ function renderActivityGrid() {
         updateSleepButton();
       }
     });
+  });
 }
 
 // ── Log Activity ──────────────────────────────────────────────────────────
@@ -230,8 +231,15 @@ function finishSleepLog(quality) {
     }
     lastClosedSleepId = null;
   } else {
-    logSleepStart(getLogTime());
-    logSleepEnd(getLogEndTime(), quality);
+    logEntry({
+      activity:   'Sleep',
+      activityId: 'sleep',
+      start:      getLogTime(),
+      end:        getLogEndTime(),
+      type:       'sleep',
+      colour:     '#7b9cff',
+      quality
+    });
     sleepSelectedInManual = false;
     updateSleepButton();
     showFeedback(document.getElementById('log-feedback'), 'Sleep logged!', '#7b9cff');
