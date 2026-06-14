@@ -1,57 +1,37 @@
 /* GOOGLE FONTS */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 
-:root {
-  --phone-color:     #444252;
-  --accent-color:    #c7b0c3;
-  --nav-height:      70px;
-
-  --body-bg:         #eee;
-  --card-bg:         #fff;
-  --card-border:     #e5e5e5;
-  --input-bg:        #fff;
-  --nav-bg:          #fff;
-  --nav-shadow:      0 -2px 8px rgba(0,0,0,0.08);
-  --muted:           #888;
-  --text-main:       #444;
-  --table-alt:       #f5f5f5;
-  --table-border:    #ddd;
-  --settings-bg:     #fff;
-  --settings-border: #f0eef0;
-  --recurring-bg:    #f9f6f9;
-  --modal-overlay:   rgba(0,0,0,0.45);
-  --modal-bg:        #fff;
-  --clear-btn-border:#ddd;
-  --clear-btn-color: #999;
-}
-
-[data-bs-theme="dark"] {
-  --phone-color:     #c8c0d4;
-  --body-bg:         #16151e;
-  --card-bg:         #1e1d2a;
-  --card-border:     #35334a;
-  --input-bg:        #26243a;
-  --nav-bg:          #1a1926;
-  --nav-shadow:      0 -2px 8px rgba(0,0,0,0.4);
-  --muted:           #8a8a9a;
-  --text-main:       #c0bccb;
-  --table-alt:       #242233;
-  --table-border:    #35334a;
-  --settings-bg:     #1e1d2a;
-  --settings-border: #2e2c3f;
-  --recurring-bg:    #26243a;
-  --modal-overlay:   rgba(0,0,0,0.65);
-  --modal-bg:        #1e1d2a;
-  --clear-btn-border:#35334a;
-  --clear-btn-color: #8a8a9a;
-}
-
 * {
   box-sizing: border-box;
 }
 
+:root {
+  --nav-height: 70px;
+  --nav-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+  --nav-bg: #fff;
+  --card-bg: #f9f6f9;
+  --card-border: #e5e5e5;
+  --clear-btn-border: #e5e5e5;
+  --clear-btn-color: #888;
+  /* add rest of your light colors */
+}
+
+[data-bs-theme="dark"] {
+  --nav-bg: #1a1a1a;
+  --card-bg: #2a2a2a;
+  --card-border: #404040;
+  --clear-btn-border: #555;
+  --clear-btn-color: #ccc;
+  /* add rest of your dark colors */
+}
+
+
+.form-check-input {
+  transition: background-position 0.3s ease;
+}
+
 body {
-  background-color: var(--body-bg);
+
   font-family: "Montserrat", sans-serif;
   margin: 0;
   padding-bottom: var(--nav-height);
@@ -157,62 +137,11 @@ nav ul li.active {
 }
 
 /* TOGGLE SWITCH */
-.toggle-switch {
-  position: relative;
-  display: inline-block;
-  width: 44px;
-  height: 24px;
-  flex-shrink: 0;
-}
 
-.toggle-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
+.form-check-input {
+  transform: scale(1.3);
 
-.toggle-slider {
-  position: absolute;
-  cursor: pointer;
-  inset: 0;
-  background-color: #ccc;
-  border-radius: 24px;
-  transition: background-color 0.2s;
-}
-
-.toggle-slider:before {
-  content: "";
-  position: absolute;
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  bottom: 3px;
-  background-color: #fff;
-  border-radius: 50%;
-  transition: transform 0.2s;
-}
-
-.toggle-switch input:checked + .toggle-slider {
-  background-color: var(--accent-color);
-}
-
-.toggle-switch input:checked + .toggle-slider:before {
-  transform: translateX(20px);
-}
-
-/* Small variant for settings recurring */
-.toggle-switch-sm {
-  width: 36px;
-  height: 20px;
-}
-
-.toggle-switch-sm .toggle-slider:before {
-  height: 14px;
-  width: 14px;
-}
-
-.toggle-switch-sm input:checked + .toggle-slider:before {
-  transform: translateX(16px);
+  transition: background-position 0.15s ease-in-out !important;
 }
 
 /* ACTIVITY CARDS */
@@ -745,15 +674,14 @@ nav ul li.active {
   font-size: 10px;
   opacity: 0.7;
 }
-
 .sleep-btn--manual-unselected {
-  background: #fff;
+  background: var(--card-bg);
   color: var(--phone-color);
-  border: 2px solid #e5e5e5;
+  border: 2px solid var(--card-border);
 }
 
 .sleep-btn--manual-selected {
-  background: #f9f5f9;
+  background: var(--card-bg);
   color: var(--phone-color);
   border: 2px solid var(--accent-color);
 }

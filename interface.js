@@ -70,7 +70,7 @@ function renderActivityGrid() {
     const col = document.createElement('div');
     col.className = 'col-4';
     col.innerHTML = `
-      <input class="radioBtn" id="radio-${activity.id}" name="group" type="radio" value="${activity.name}" />
+     <input class="radioBtn" id="radio-${activity.id}" name="group" type="radio" value="${activity.name}" />
       <label for="radio-${activity.id}">
         <div class="toggle-icon fas fa-check"></div>
         <i class="activity-icon fas ${activity.icon}" style="color:${activity.color}"></i>
@@ -280,25 +280,29 @@ function renderSettings() {
           <i class="fas ${activity.icon} activity-setting-icon" style="color:${activity.color}"></i>
           <span class="activity-setting-name">${activity.name}</span>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="enable-${activity.id}" ${isEnabled ? 'checked' : ''}
+        <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="enable-${activity.id}" ${isEnabled ? 'checked' : ''}
             onchange="onActivityToggle('${activity.id}', this)">
-          <span class="toggle-slider"></span>
-        </label>
+          </div>
       </div>
-      <div class="recurring-row" id="recurring-row-${activity.id}"
+
+      <div class="recurring-row activity-setting-left" id="recurring-row-${activity.id}"
            style="display:${isEnabled ? 'flex' : 'none'}">
         <i class="fas fa-rotate recurring-icon"></i>
+  
+
         <span class="recurring-label">Auto-log daily at</span>
+
         <input type="time" id="recurring-time-${activity.id}" class="recurring-time-input"
           value="${rule ? rule.time : '08:00'}"
           onchange="onRecurringTimeChange('${activity.id}')">
-        <label class="toggle-switch toggle-switch-sm">
-          <input type="checkbox" id="recurring-enable-${activity.id}"
+
+        <div class="form-check form-switch">
+           <input class="form-check-input" type="checkbox" id="recurring-enable-${activity.id}"
             ${rule && rule.enabled ? 'checked' : ''}
             onchange="onRecurringToggle('${activity.id}', this)">
-          <span class="toggle-slider"></span>
-        </label>
+            </div>
+  
       </div>`;
     list.appendChild(row);
   });
