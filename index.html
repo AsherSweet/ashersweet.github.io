@@ -97,6 +97,26 @@
   </div>
   <button id="install" hidden>Install</button>
 
+
+  <!-- Toolbox -->
+
+  <div class="content" id="page-toolbox">
+       <fieldset>
+        <div class="row g-3 mt-1" id="activity-grid"></div>
+      </fieldset>
+      <!-- Log Button -->
+      <div class="text-center mt-3">
+        <button id="log-btn" onclick="handleLog()" class="log-btn">
+          <i class="fas fa-plus-circle me-2"></i>Log Activity
+        </button>
+        <p id="log-feedback" class="log-feedback"></p>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+  
   <!-- Calendar -->
   <div class="content" id="page-blog">
     <div id="calendar"></div>
@@ -185,14 +205,23 @@
           <span class="star" data-value="4">★</span>
           <span class="star" data-value="5">★</span>
         </div>
-        <!-- This needs some work to  -->
+        <!-- This needs some work to times awake -->
         <p class="quality-prompt">How many times did you wake up in the night?</p>
-          <div class="star-rating" id="times-awake">
-            <button class="star" data-value="1">1</button>
-            <button class="star" data-value="2">2</button>
-            <button class="star" data-value="3">3</button>
-            <button class="star" data-value="4">4</button>
-            <button class="star" data-value="5">5+</button>
+          <div class="button-rating" id="times-awake">
+            <input data-value="1" type="radio" class="btn-check" name="options-base" id="option1" autocomplete="off" checked>
+            <label data-value="1" class="btn" for="option1">1</label>
+                      
+            <input data-value="2" type="radio" class="btn-check" name="options-base" id="option2" autocomplete="off">
+            <label data-value="2" class="btn" for="option2">2</label>
+                      
+            <input data-value="3" type="radio" class="btn-check" name="options-base" id="option3" autocomplete="off">
+            <label data-value="3" class="btn" for="option3">3</label>
+                      
+            <input data-value="4" type="radio" class="btn-check" name="options-base" id="option4" autocomplete="off">
+            <label data-value="4" class="btn" for="option4">4</label>
+            
+            <input data-value="5" type="radio" class="btn-check" name="options-base" id="option5" autocomplete="off">
+            <label data-value="5" class="btn" for="option5">5+</label>
           </div>
       </div>
       <div class="edit-modal-footer">
@@ -211,6 +240,10 @@
       <li data-page="page-work">
         <i class="fas fa-list"></i>
         <p>Log</p>
+      </li>
+      <li data-page="page-toolbox">
+        <i class="fas fa-toolbox"></i>
+        <p>ToolBox</p>
       </li>
       <li data-page="page-blog">
         <i class="fas fa-calendar-days"></i>

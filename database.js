@@ -5,11 +5,13 @@ const DEFAULT_ACTIVITIES = [
   { id: 'exercise',   name: 'Exercise',   icon: 'fa-person-running', color: '#5b8dd9' },
   { id: 'caffeine',   name: 'Caffeine',   icon: 'fa-mug-hot',        color: '#d4845a' },
   { id: 'alcohol',    name: 'Alcohol',    icon: 'fa-wine-glass',     color: '#9b6dbd' },
-  { id: 'food',       name: 'Food',       icon: 'fa-utensils',       color: '#5b9b6d' },
+  { id: 'substances-down',     name: 'Substances (Downers)',     icon: 'fa-joint fa-arrow-up',        color: '#0c7700' },
   { id: 'medication', name: 'Medication', icon: 'fa-pills',          color: '#d45a7a' },
+  { id: 'food',       name: 'Food',       icon: 'fa-utensils',       color: '#5b9b6d' },
   { id: 'light',      name: 'First Light',      icon: 'fa-sun',            color: '#d4b85a' },
   { id: 'rumination',     name: 'Rumination',     icon: 'fa-brain',          color: '#7a5a9b' },
-  { id: 'screen',     name: 'Screen',     icon: 'fa-display',        color: '#5ab8d4' }
+  { id: 'screen',     name: 'Screen',     icon: 'fa-display',        color: '#5ab8d4' },
+  { id: 'menstration',     name: 'Menstration',     icon: 'fa-droplet',        color: '#d20000' },
 ];
 
 //  Settings
@@ -17,11 +19,11 @@ const DEFAULT_ACTIVITIES = [
 function getSettings() {
   try {
     const s = JSON.parse(localStorage.getItem(SETTINGS_KEY));
-    if (!s) return { enabled: ['exercise', 'caffeine', 'meal', 'medication', 'light', 'alcohol', 'rumination', 'screen'], recurring: {} };
+    if (!s) return { enabled: ['exercise', 'caffeine', 'food', 'medication', 'light', 'alcohol', 'rumination', 'screen'], recurring: {} };
     if (!s.recurring) s.recurring = {};
     return s;
   } catch {
-    return { enabled: ['exercise', 'caffeine', 'meal', 'medication', 'light', 'alcohol', 'rumination', 'screen'], recurring: {} };
+    return { enabled: ['exercise', 'caffeine', 'food', 'medication', 'light', 'alcohol', 'rumination', 'screen'], recurring: {} };
   }
 }
 

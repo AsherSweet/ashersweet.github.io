@@ -251,6 +251,7 @@ function finishSleepLog(quality, tts, waso) {
 }
 
 function confirmSleepQualityModal() {
+  console.log(getSelectedQuality('quality-modal-stars'),getSelectedQuality('times-awake'));
   finishSleepLog(getSelectedQuality('quality-modal-stars'),getSelectedQuality('times-awake'));
 }
 
