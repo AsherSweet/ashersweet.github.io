@@ -14,8 +14,8 @@
     "display":"standalone",
     "dir":"auto",
     "lang":"en-GB",
-    "name":"Big App",
-    "short_name":"bigapp",
+    "name":"Sleep Diary",
+    "short_name":"sleepdiary",
     "start_url":"https://ashersweet.github.io/",
     "description":"A sleep tracker that displays it on a calendar"
 }

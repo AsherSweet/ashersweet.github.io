@@ -267,7 +267,7 @@ function toggleDarkMode(checkbox) {
 }
 
 //  Settings 
-// Make some (first light) not removable.
+// Make some (first light) not removable
 function renderSettings() {
   const list = document.getElementById('settings-activity-list');
   if (!list) return;
