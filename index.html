@@ -87,6 +87,7 @@
           <tbody id="log-body"></tbody>
         </table>
         <div class="text-center mt-3">
+          <!-- Clear all needs to prompt on deletion first before actually deleting everything -->
           <button onclick="clearAllLogs()" class="clear-btn">
             <i class="fas fa-trash me-1"></i>Clear All
           </button>
@@ -98,8 +99,7 @@
 
 
   <!-- Toolbox -->
-<!-- Look at the discord for the image of the interface -->
-  
+  <!-- Look at the discord for the image of the interface -->
 <div class="content" id="page-toolbox">
        <fieldset>
         <div class="row g-3 mt-1" id="activity-grid"></div>
@@ -198,6 +198,7 @@
       <h3 class="edit-modal-title">How was your sleep?</h3>
       <input type="hidden" id="quality-modal-context" value="" />
       <div class="edit-modal-body" style="align-items:center; padding: 8px 0;">
+        <!-- Possibly redundent -->
         <div class="star-rating" id="quality-modal-stars">
           <span class="star" data-value="1">★</span>
           <span class="star" data-value="2">★</span>
@@ -205,7 +206,8 @@
           <span class="star" data-value="4">★</span>
           <span class="star" data-value="5">★</span>
         </div>
-        <!-- This needs some work to times awake -->
+        <!-- This needs some work to times awake And hook up in the backend.-->
+         <!-- Probably can be simplified -->
         <p class="quality-prompt">How many times did you wake up in the night?</p>
           <div class="button-rating" id="times-awake">
             <input data-value="1" type="radio" class="btn-check" name="options-base" id="option1" autocomplete="off" checked>
@@ -230,7 +232,7 @@
       </div>
     </div>
   </div>
-
+<!-- Navbar my beloved -->
   <nav>
     <ul>
       <li class="active" data-page="page-home">
