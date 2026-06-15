@@ -2,7 +2,8 @@ var calendarInitialised = false;
 var editingEntryId = null;
 var lastClosedSleepId = null;
 var sleepSelectedInManual = false;
-
+var waso = null;
+var tts = null;
 //  Helpers 
 
 function toDatetimeLocal(iso) {
@@ -223,7 +224,7 @@ function openSleepQualityModal(context) {
   setStarRating('quality-modal-stars', 0);
 }
 
-function finishSleepLog(quality) {
+function finishSleepLog(quality, tts, waso) {
   const context = document.getElementById('quality-modal-context').value;
   if (context === 'auto') {
     if (lastClosedSleepId !== null && quality !== null) {
@@ -238,7 +239,9 @@ function finishSleepLog(quality) {
       end:        getLogEndTime(),
       type:       'sleep',
       colour:     '#7b9cff',
-      quality
+      quality,
+      tts,
+      waso,
     });
     sleepSelectedInManual = false;
     updateSleepButton();
@@ -248,7 +251,7 @@ function finishSleepLog(quality) {
 }
 
 function confirmSleepQualityModal() {
-  finishSleepLog(getSelectedQuality('quality-modal-stars'));
+  finishSleepLog(getSelectedQuality('quality-modal-stars'),getSelectedQuality('times-awake'));
 }
 
 function closeSleepQualityModal() {
@@ -263,7 +266,7 @@ function toggleDarkMode(checkbox) {
 }
 
 //  Settings 
-
+// Make some (first light) not removable.
 function renderSettings() {
   const list = document.getElementById('settings-activity-list');
   if (!list) return;
@@ -290,7 +293,6 @@ function renderSettings() {
            style="display:${isEnabled ? 'flex' : 'none'}">
         <i class="fas fa-rotate recurring-icon"></i>
   
-
         <span class="recurring-label">Auto-log daily at</span>
 
         <input type="time" id="recurring-time-${activity.id}" class="recurring-time-input"

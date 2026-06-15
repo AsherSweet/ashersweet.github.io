@@ -5,12 +5,11 @@ const DEFAULT_ACTIVITIES = [
   { id: 'exercise',   name: 'Exercise',   icon: 'fa-person-running', color: '#5b8dd9' },
   { id: 'caffeine',   name: 'Caffeine',   icon: 'fa-mug-hot',        color: '#d4845a' },
   { id: 'alcohol',    name: 'Alcohol',    icon: 'fa-wine-glass',     color: '#9b6dbd' },
-  { id: 'meal',       name: 'Meal',       icon: 'fa-utensils',       color: '#5b9b6d' },
+  { id: 'food',       name: 'Food',       icon: 'fa-utensils',       color: '#5b9b6d' },
   { id: 'medication', name: 'Medication', icon: 'fa-pills',          color: '#d45a7a' },
-  { id: 'light',      name: 'Light',      icon: 'fa-sun',            color: '#d4b85a' },
-  { id: 'stress',     name: 'Stress',     icon: 'fa-brain',          color: '#7a5a9b' },
-  { id: 'screen',     name: 'Screen',     icon: 'fa-display',        color: '#5ab8d4' },
-  { id: 'water',      name: 'Water',      icon: 'fa-droplet',        color: '#5a9bd4' },
+  { id: 'light',      name: 'First Light',      icon: 'fa-sun',            color: '#d4b85a' },
+  { id: 'rumination',     name: 'Rumination',     icon: 'fa-brain',          color: '#7a5a9b' },
+  { id: 'screen',     name: 'Screen',     icon: 'fa-display',        color: '#5ab8d4' }
 ];
 
 //  Settings
@@ -18,11 +17,11 @@ const DEFAULT_ACTIVITIES = [
 function getSettings() {
   try {
     const s = JSON.parse(localStorage.getItem(SETTINGS_KEY));
-    if (!s) return { enabled: ['exercise', 'caffeine', 'meal'], recurring: {} };
+    if (!s) return { enabled: ['exercise', 'caffeine', 'meal', 'medication', 'light', 'alcohol', 'rumination', 'screen'], recurring: {} };
     if (!s.recurring) s.recurring = {};
     return s;
   } catch {
-    return { enabled: ['exercise', 'caffeine', 'meal'], recurring: {} };
+    return { enabled: ['exercise', 'caffeine', 'meal', 'medication', 'light', 'alcohol', 'rumination', 'screen'], recurring: {} };
   }
 }
 
@@ -156,10 +155,11 @@ function saveDatabase(data) {
 }
 
 
-// Universal entry creation — handles both regular activities and sleep sessions.
+// Universal entry creation handles both regular activities and sleep sessions.
 // Call this from anywhere instead of activityLog / logSleepStart.
-
-function logEntry({ activity, activityId, start, end, type, colour, quality, recurring } = {}) {
+// tts - Time To Sleep   
+// waso - Wake after sleep onset, How long you are awake during the night
+function logEntry({ activity, activityId, start, end, type, colour, quality, tts, waso, recurring } = {}) {
   const db  = loadDatabase();
   const def = DEFAULT_ACTIVITIES.find(a => a.name === activity || a.id === activity || a.id === activityId);
   const entry = {
@@ -169,7 +169,9 @@ function logEntry({ activity, activityId, start, end, type, colour, quality, rec
     start:      start  || new Date().toISOString(),
     end:        end    || null,
     type:       type   || 'regular',
-    colour:     colour || (def ? def.color : getRandomColour())
+    colour:     colour || (def ? def.color : getRandomColour()),
+    tts:        tts    || null,
+    waso:       waso   || null
   };
   if (quality  != null) entry.quality  = quality;
   if (recurring      ) entry.recurring = true;

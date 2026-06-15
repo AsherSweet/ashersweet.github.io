@@ -46,12 +46,8 @@
         </div>
       </div>
 
-      <!-- Activity Grid -->
-      <fieldset>
-        <div class="row g-3 mt-1" id="activity-grid"></div>
-      </fieldset>
-
       <!-- Sleep Button -->
+
       <div class="mt-3">
         <button id="sleep-btn" onclick="handleSleepToggle()" class="sleep-btn sleep-btn--bedtime">
           <div class="sleep-btn-tick fas fa-check" id="sleep-btn-tick"></div>
@@ -61,6 +57,13 @@
           <span id="sleep-btn-text">Log Bedtime</span>
         </button>
       </div>
+
+      <!-- Activity Grid -->
+
+      <fieldset>
+        <div class="row g-3 mt-1" id="activity-grid"></div>
+      </fieldset>
+
 
       <!-- Log Button -->
       <div class="text-center mt-3">
@@ -158,6 +161,7 @@
             <span class="star" data-value="4">★</span>
             <span class="star" data-value="5">★</span>
           </div>
+
         </div>
       </div>
       <div class="edit-modal-footer">
@@ -181,6 +185,15 @@
           <span class="star" data-value="4">★</span>
           <span class="star" data-value="5">★</span>
         </div>
+        <!-- This needs some work to  -->
+        <p class="quality-prompt">How many times did you wake up in the night?</p>
+          <div class="star-rating" id="times-awake">
+            <button class="star" data-value="1">1</button>
+            <button class="star" data-value="2">2</button>
+            <button class="star" data-value="3">3</button>
+            <button class="star" data-value="4">4</button>
+            <button class="star" data-value="5">5+</button>
+          </div>
       </div>
       <div class="edit-modal-footer">
         <button onclick="confirmSleepQualityModal()" class="log-btn">Log</button>
