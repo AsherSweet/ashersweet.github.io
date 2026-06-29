@@ -157,8 +157,8 @@ function saveDatabase(data) {
 }
 
 
+
 // Universal entry creation handles both regular activities and sleep sessions.
-// Call this from anywhere instead of activityLog / logSleepStart.
 // tts - Time To Sleep   
 // waso - Wake after sleep onset, How long you are awake during the night
 function logEntry({ activity, activityId, start, end, type, colour, quality, tts, waso, recurring } = {}) {

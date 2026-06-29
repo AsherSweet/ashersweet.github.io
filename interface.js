@@ -114,45 +114,8 @@ function handleLog() {
   showFeedback(feedback, `"${selected.value}" logged!`, 'var(--accent-color)');
 }
 
-//  Star Rating 
 
-function initStarRating(containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  container.querySelectorAll('.star').forEach(star => {
-    star.addEventListener('click', function() {
-      setStarRating(containerId, parseInt(this.dataset.value));
-    });
-    star.addEventListener('mouseover', function() {
-      highlightStars(containerId, parseInt(this.dataset.value));
-    });
-  });
-  container.addEventListener('mouseleave', function() {
-    highlightStars(containerId, parseInt(container.dataset.selected || '0'));
-  });
-}
 
-function setStarRating(containerId, value) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  container.dataset.selected = value;
-  highlightStars(containerId, value);
-}
-
-function highlightStars(containerId, value) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  container.querySelectorAll('.star').forEach(star => {
-    star.classList.toggle('active', parseInt(star.dataset.value) <= value);
-  });
-}
-
-function getSelectedQuality(containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return null;
-  const val = parseInt(container.dataset.selected || '0');
-  return val > 0 ? val : null;
-}
 
 //  Sleep Toggle 
 
@@ -218,47 +181,6 @@ function handleSleepToggle() {
   updateSleepButton();
 }
 
-function openSleepQualityModal(context) {
-  document.getElementById('sleep-quality-modal').style.display = 'flex';
-  document.getElementById('quality-modal-context').value = context;
-  setStarRating('quality-modal-stars', 0);
-}
-
-function finishSleepLog(quality, tts, waso) {
-  const context = document.getElementById('quality-modal-context').value;
-  if (context === 'auto') {
-    if (lastClosedSleepId !== null && quality !== null) {
-      updateEntry(lastClosedSleepId, { quality });
-    }
-    lastClosedSleepId = null;
-  } else {
-    logEntry({
-      activity:   'Sleep',
-      activityId: 'sleep',
-      start:      getLogTime(),
-      end:        getLogEndTime(),
-      type:       'sleep',
-      colour:     '#7b9cff',
-      quality,
-      tts,
-      waso,
-    });
-    sleepSelectedInManual = false;
-    updateSleepButton();
-    showFeedback(document.getElementById('log-feedback'), 'Sleep logged!', '#7b9cff');
-  }
-  document.getElementById('sleep-quality-modal').style.display = 'none';
-}
-
-function confirmSleepQualityModal() {
-  console.log(getSelectedQuality('quality-modal-stars'),getSelectedQuality('times-awake'));
-  finishSleepLog(getSelectedQuality('quality-modal-stars'),getSelectedQuality('times-awake'));
-}
-
-function closeSleepQualityModal() {
-  finishSleepLog(null);
-}
-
 //  Dark Mode 
 
 function toggleDarkMode(checkbox) {
@@ -267,7 +189,7 @@ function toggleDarkMode(checkbox) {
 }
 
 //  Settings 
-// Make some (first light) not removable
+// Changes needed: Make some (first light) not removable
 function renderSettings() {
   const list = document.getElementById('settings-activity-list');
   if (!list) return;
@@ -310,6 +232,8 @@ function renderSettings() {
     list.appendChild(row);
   });
 }
+
+// Activities in settings
 
 function onActivityToggle(activityId, checkbox) {
   toggleActivity(activityId);
@@ -370,7 +294,7 @@ function openEditModal(calEvent) {
   const qualityRow = document.getElementById('edit-quality-row');
   if (entry.type === 'sleep') {
     qualityRow.style.display = 'block';
-    setStarRating('edit-stars', entry.quality || 0);
+    setRating('edit-stars', entry.quality || 0);
   } else {
     qualityRow.style.display = 'none';
   }
@@ -393,6 +317,7 @@ function saveEditModal() {
   const entry = getLogs().find(e => e.id === editingEntryId);
   if (entry && entry.type === 'sleep') {
     fields.quality = getSelectedQuality('edit-stars');
+    fields.waso = getSelectedQuality('calWaso')
   }
   updateEntry(editingEntryId, fields);
   closeEditModal();
@@ -406,8 +331,9 @@ function deleteEditModal() {
 
 //  Nav 
 
+
+
 document.addEventListener("DOMContentLoaded", () => {
-  // Restore dark mode
   if (localStorage.getItem('darkMode') === '1') {
     document.documentElement.setAttribute('data-bs-theme', 'dark');
     const toggle = document.getElementById('dark-mode-toggle');
@@ -417,16 +343,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderActivityGrid();
   renderSettings();
   updateSleepButton();
-  initStarRating('sleep-stars');
-  initStarRating('edit-stars');
-  initStarRating('quality-modal-stars');
 
-  document.getElementById('edit-modal').addEventListener('click', function(e) {
-    if (e.target === this) closeEditModal();
-  });
-  document.getElementById('sleep-quality-modal').addEventListener('click', function(e) {
-    if (e.target === this) closeSleepQualityModal();
-  });
 
   document.querySelectorAll("nav ul li").forEach(item => {
     item.addEventListener("click", () => {
