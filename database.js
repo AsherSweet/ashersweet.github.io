@@ -2,16 +2,17 @@ const STORAGE_KEY = "activityDatabase";
 const SETTINGS_KEY = "activitySettings";
 
 const DEFAULT_ACTIVITIES = [
-  { id: 'exercise',   name: 'Exercise',   icon: 'fa-person-running', color: '#5b8dd9' },
-  { id: 'caffeine',   name: 'Caffeine',   icon: 'fa-mug-hot',        color: '#d4845a' },
-  { id: 'alcohol',    name: 'Alcohol',    icon: 'fa-wine-glass',     color: '#9b6dbd' },
-  { id: 'substances-down',     name: 'Substances (Downers)',     icon: 'fa-joint fa-arrow-up',        color: '#0c7700' },
-  { id: 'medication', name: 'Medication', icon: 'fa-pills',          color: '#d45a7a' },
-  { id: 'food',       name: 'Food',       icon: 'fa-utensils',       color: '#5b9b6d' },
-  { id: 'light',      name: 'First Light',      icon: 'fa-sun',            color: '#d4b85a' },
-  { id: 'rumination',     name: 'Rumination',     icon: 'fa-brain',          color: '#7a5a9b' },
-  { id: 'screen',     name: 'Screen',     icon: 'fa-display',        color: '#5ab8d4' },
-  { id: 'menstration',     name: 'Menstration',     icon: 'fa-droplet',        color: '#d20000' },
+  { id: 'light',              name: 'First Light',          icon1: 'fa-sun', icon2: '',             color: '#d4b85a' },
+  { id: 'exercise',           name: 'Exercise',             icon1: 'fa-person-running', icon2: '',  color: '#5b8dd9' },
+  { id: 'food',               name: 'Food',                 icon1: 'fa-utensils', icon2: '',        color: '#5b9b6d' },
+  { id: 'rumination',         name: 'Rumination',           icon1: 'fa-brain', icon2: '',           color: '#7a5a9b' },
+  { id: 'screen',             name: 'Screen',               icon1: 'fa-display', icon2: '',         color: '#5ab8d4' },
+  { id: 'caffeine',           name: 'Caffeine',             icon1: 'fa-mug-hot', icon2: '',         color: '#d4845a' },
+  { id: 'alcohol',            name: 'Alcohol',              icon1: 'fa-wine-glass', icon2: '',      color: '#9b6dbd' },
+  { id: 'substances-down',    name: 'Substances (Downers)', icon1: 'fa-joint', icon2: 'fa-arrow-down',color: '#0c7700' },
+  { id: 'substances-up',    name: 'Substances (Uppers)', icon1: 'fa-tablets', icon2: 'fa-arrow-up',color: '#0c7700' },
+  { id: 'medication',         name: 'Medication',           icon1: 'fa-pills', icon2: '',           color: '#d45a7a' },
+  { id: 'menstration',        name: 'Menstration',          icon1: 'fa-droplet', icon2: '',         color: '#d20000' },
 ];
 
 //  Settings

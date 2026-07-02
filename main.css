@@ -376,6 +376,15 @@ nav ul li.active {
 }
 
 /* CALENDAR PAGE */
+
+[data-bs-theme="light"] .fc-unthemed td.fc-today {
+  opacity: 20%;
+}
+
+[data-bs-theme="dark"] .fc-unthemed td.fc-today {
+  opacity: 20%;
+}
+
 #page-blog {
   height: calc(100vh - var(--nav-height));
   overflow: hidden;
@@ -572,57 +581,6 @@ nav ul li.active {
   letter-spacing: 1px;
 }
 
-/* EDIT MODAL */
-.edit-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.edit-modal {
-  background: #fff;
-  border-radius: 16px;
-  padding: 24px 20px 20px;
-  width: 100%;
-  max-width: 340px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-}
-
-.edit-modal-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--phone-color);
-  letter-spacing: 0.04em;
-  margin: 0 0 16px;
-  text-align: center;
-}
-
-.edit-modal-body {
-  display: flex;
-  flex-direction: column;
-}
-
-.edit-modal-body .manual-time-row {
-  max-width: 100%;
-}
-
-.edit-modal-footer {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-top: 20px;
-  flex-wrap: wrap;
-}
-
-.delete-modal-btn:hover {
-  border-color: #e07070 !important;
-  color: #e07070 !important;
-}
 
 /* MANUAL TIME ROWS */
 .manual-time-row {
@@ -632,6 +590,7 @@ nav ul li.active {
   max-width: 300px;
   margin: 0 auto;
 }
+
 
 .manual-time-label {
   font-size: 11px;
@@ -654,6 +613,8 @@ nav ul li.active {
 .sleep-btn {
   position: relative;
 }
+
+.fc-unthemed td.fc-today 
 
 .sleep-btn-tick {
   display: none;
@@ -752,16 +713,19 @@ nav ul li.active {
 .edit-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: hsla(0, 0%, 0%, 0.45); 
   z-index: 200;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
 }
+[data-bs-theme="dark"] .edit-modal {
+  background: #2a2a2a;
+}
 
 .edit-modal {
-  background: #fff;
+  background: white;
   border-radius: 16px;
   padding: 24px 20px 20px;
   width: 100%;
@@ -799,3 +763,6 @@ nav ul li.active {
   border-color: #e07070 !important;
   color: #e07070 !important;
 }
+
+
+

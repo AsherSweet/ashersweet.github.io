@@ -71,12 +71,13 @@ function renderActivityGrid() {
     const col = document.createElement('div');
     col.className = 'col-4';
     col.innerHTML = `
-     <input class="radioBtn" id="radio-${activity.id}" name="group" type="radio" value="${activity.name}" />
-      <label for="radio-${activity.id}">
-        <div class="toggle-icon fas fa-check"></div>
-        <i class="activity-icon fas ${activity.icon}" style="color:${activity.color}"></i>
-        <p class="activity-label mb-0">${activity.name}</p>
-      </label>`;
+  <input class="radioBtn" id="radio-${activity.id}" name="group" type="radio" value="${activity.name}" />
+  <label for="radio-${activity.id}">
+    <div class="toggle-icon fas fa-check"></div>
+    ${activity.icon1 ? `<i class="activity-icon fas ${activity.icon1}" style="color:${activity.color}"></i>` : ''}
+    ${activity.icon2 ? `<i class="activity-icon fas ${activity.icon2}" style="color:${activity.color}"></i>` : ''}
+    <p class="activity-label mb-0">${activity.name}</p>
+  </label>`;
     grid.appendChild(col);
     col.querySelector('.radioBtn').addEventListener('change', function() {
       if (this.checked && sleepSelectedInManual) {
@@ -200,15 +201,17 @@ function renderSettings() {
     const rule = settings.recurring[activity.id] || null;
     const row = document.createElement('div');
     row.className = 'activity-setting-row';
+
     row.innerHTML = `
       <div class="activity-setting-main">
         <div class="activity-setting-left">
-          <i class="fas ${activity.icon} activity-setting-icon" style="color:${activity.color}"></i>
+          ${activity.icon1 ? `<i class="activity-setting-icon fas ${activity.icon1}" style="color:${activity.color}"></i>` : ''}
+          ${activity.icon2 ? `<i class="activity-setting-icon fas ${activity.icon2}" style="color:${activity.color}"></i>` : ''}
           <span class="activity-setting-name">${activity.name}</span>
         </div>
         <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="enable-${activity.id}" ${isEnabled ? 'checked' : ''}
-            onchange="onActivityToggle('${activity.id}', this)">
+              ${activity.id!='light' ? `<input class="form-check-input" type="checkbox" id="enable-${activity.id}" ${isEnabled ? 'checked' : ''}
+            onchange="onActivityToggle('${activity.id}', this)">`: ''}
           </div>
       </div>
 
@@ -295,6 +298,8 @@ function openEditModal(calEvent) {
   if (entry.type === 'sleep') {
     qualityRow.style.display = 'block';
     setRating('edit-stars', entry.quality || 0);
+    setRating('calWaso', entry.waso || 0);
+    
   } else {
     qualityRow.style.display = 'none';
   }
@@ -330,8 +335,6 @@ function deleteEditModal() {
 }
 
 //  Nav 
-
-
 
 document.addEventListener("DOMContentLoaded", () => {
   if (localStorage.getItem('darkMode') === '1') {
