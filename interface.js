@@ -305,9 +305,11 @@ function openEditModal(calEvent) {
   }
   document.getElementById('edit-modal').style.display = 'flex';
 }
-
-function closeEditModal() {
-  document.getElementById('edit-modal').style.display = 'none';
+function openModal(modalid) {
+  document.getElementById(modalid).style.display = '';
+}
+function closeModal(modalid) {
+  document.getElementById(modalid).style.display = 'none';
   editingEntryId = null;
 }
 
@@ -325,13 +327,13 @@ function saveEditModal() {
     fields.waso = getSelectedQuality('calWaso')
   }
   updateEntry(editingEntryId, fields);
-  closeEditModal();
+  closeModal('edit-modal');
 }
 
 function deleteEditModal() {
   if (editingEntryId === null) return;
   removeEntry(editingEntryId);
-  closeEditModal();
+  closeModal('edit-modal');
 }
 
 //  Nav 
@@ -342,12 +344,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const toggle = document.getElementById('dark-mode-toggle');
     if (toggle) toggle.checked = true;
   }
-
   renderActivityGrid();
   renderSettings();
   updateSleepButton();
-
-
   document.querySelectorAll("nav ul li").forEach(item => {
     item.addEventListener("click", () => {
       document.querySelectorAll("nav ul li").forEach(i => i.classList.remove("active"));

@@ -237,6 +237,7 @@ function removeEntry(id) {
 }
 
 function clearAllLogs() {
+  closeModal('deleteLogs')
   saveDatabase([]);
   renderLog();
 }

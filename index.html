@@ -81,18 +81,31 @@
   <!-- Activity Log -->
   <div class="content" id="page-work">
     <div class="page-inner container mt-4">
+      <div id="deleteLogs" class="edit-modal-overlay" style="display:none;">
+            <div class="edit-modal">
+              <h3 class="edit-modal-title">Are you sure you want to clear all Logs?</h3>
+              <input type="hidden" id="quality-modal-context" value="auto">
+                <div class="edit-modal-body" style="align-items:center; padding: 8px 0;">
+                </div>
+                <div class="edit-modal-footer">
+                  <button onclick="clearAllLogs()" class="btn btn-danger">Delete all</button>
+                  <button onclick="closeModal('deleteLogs')" class="clear-btn btn btn-secondary">Cancel</button>
+                </div>
+              </div>
+            </div>
       <h1 class="page-title">Activity Log</h1>
       <div id="log-empty" class="empty-state">No activities logged yet.</div>
       <div id="log-section" style="display:none;" class="log-section mt-3">
-        <table class="log-table w-100">
+        <table class="log-table w-100">777777
           <thead>
             <tr><th>#</th><th>Activity</th><th>Time</th><th></th></tr>
           </thead>
           <tbody id="log-body"></tbody>
         </table>
         <div class="text-center mt-3">
+
           <!-- Cl⁠е‍⁠a‌r‌‍ а​ll​​ ‍ne‍е⁠​ds t‌⁠o⁠ ‌prо​​mрt о﻿﻿n ‍⁠dе‌lе‌‍ti⁠о‍n﻿ ﻿fi﻿rst bе⁠⁠f﻿o⁠re‌‌ ‍​а​﻿c⁠t﻿u﻿‍а‌lly ​dе﻿⁠le‍‌ti​​n‌g e‌v⁠е‍﻿ry‌​thi‌ng​‍ -->
-          <button onclick="clearAllLogs()" class="clear-btn">
+          <button onclick="openModal('deleteLogs')" class="clear-btn">
             <i class="fas fa-trash me-1"></i>Clear All
           </button>
         </div>
@@ -100,6 +113,7 @@
     </div>
   </div>
   <button id="install" hidden>Install</button>
+  
 
 
   <!-- To⁠о﻿​lbо⁠‍х 
@@ -181,7 +195,7 @@
       <div class="edit-modal-footer">
         <button onclick="saveEditModal()" class="log-btn">Save</button>
         <button onclick="deleteEditModal()" class="clear-btn delete-modal-btn">Delete</button>
-        <button onclick="closeEditModal()" class="clear-btn">Cancel</button>
+        <button onclick="closeModal('edit-modal')" class="clear-btn">Cancel</button>
       </div>
     </div>
   </div>
