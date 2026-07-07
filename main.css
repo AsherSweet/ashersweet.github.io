@@ -14,30 +14,27 @@
     transform: translateX(50px);
 }
 :root {
-  --nav-height: 70px;
-  --nav-shadow: 0 -2px 8px rgba(0,0,0,0.08);
-  --card-bg: #f9f6f9;
-  --card-border: #e5e5e5;
-  --clear-btn-border: #e5e5e5;
-  --clear-btn-colour: #888;
-  --phone-colour: #2c2d54;
-   /* #d8c3ff; */
+  --text: #;
+  --button-bg: #f9f6f9;
+  --button-border: #e5e5e5;
+  --special-element-colour: #2c2d54;
   --nav-bg: #bea7e5; 
   --accent-colour: #2c2d54;
   --muted: #655a76;
+  --selected: #;
   --sleep-btn: #838fff;
   --sleep-btn-text: #2c2d54;
+  --nav-height: 70px;
+  --nav-shadow: 0 -2px 8px rgba(0,0,0,0.08);
 }
 
 [data-bs-theme="dark"] {
   --settings-bg: #2c2d54;
   --nav-bg: #2c2d54;
-  --card-bg: #2c2d54;
+  --button-bg: #2c2d54;
   --accent-colour: #bea7e5;
-  --card-border: #404040;
-  --clear-btn-border: #555;
-  --clear-btn-colour: #ccc;
-  --phone-colour: #bea7e5;  
+  --button-border: #404040;
+  --special-element-colour: #bea7e5;  
   --sleep-btn: #2c2d54;
   --sleep-btn-text: #a0aaff;
 }
@@ -67,7 +64,7 @@ body {
   font-size: clamp(18px, 5vw, 24px);
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: var(--phone-colour);
+  color: var(--special-element-colour);
   text-align: center;
   margin-bottom: 6px;
 }
@@ -172,7 +169,7 @@ nav ul li.active {
   border: 2px solid var(--accent-colour);
   border-radius: 10px;
   background: var(--input-bg);
-  color: var(--phone-colour);
+  color: var(--special-element-colour);
   text-align: center;
 }
 
@@ -185,8 +182,8 @@ nav ul li.active {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--card-bg);
-  border: 2px solid var(--card-border);
+  background: var(--button-bg);
+  border: 2px solid var(--button-border);
   border-radius: 12px;
   padding: 12px 6px 10px;
   cursor: pointer;
@@ -226,7 +223,7 @@ nav ul li.active {
   font-size: clamp(9px, 2.5vw, 11px);
   font-weight: 700;
   letter-spacing: 0.03em;
-  color: var(--phone-colour);
+  color: var(--special-element-colour);
   text-transform: uppercase;
 }
 
@@ -276,7 +273,7 @@ nav ul li.active {
 .log-btn {
   background-color: var(--sleep-btn);
   color: var(--accent-colour);
-   border: none;/* 2px solid var(--accent-colour); */
+  border: none;/* 2px solid var(--accent-colour); */
   border-radius: 30px;
   padding: clamp(9px, 2.5vw, 12px) clamp(22px, 6vw, 32px);
   font-family: "Montserrat", sans-serif;
@@ -303,17 +300,20 @@ nav ul li.active {
 }
 
 .log-section {
+
   padding: 0 0 8px;
 }
 
 .log-table {
-  border-collapse: collapse;
+  border-radius: 30px;
+  /* border-collapse: collapse; */
   font-size: clamp(11px, 3vw, 13px);
 }
 
 .log-table th {
-  background-color: var(--phone-colour);
-  color: var(--accent-colour);
+
+  background-color: var(--nav-bg);
+  color: var(--text);
   padding: 8px 12px;
   text-align: left;
   font-weight: 700;
@@ -323,7 +323,7 @@ nav ul li.active {
 .log-table td {
   padding: 6px 12px;
   border-bottom: 1px solid var(--table-border);
-  color: var(--text-main);
+  color: var(--text);
 }
 
 .log-table tr:nth-child(even) td {
@@ -378,10 +378,10 @@ nav ul li.active {
 }
 
 .clear-btn {
-  background: none;
-  border: 1px solid var(--clear-btn-border);
+  background: var(--button-bg);
+  color: var(--text);
+  border: 1px solid var(--button-border);
   border-radius: 20px;
-  color: var(--clear-btn-colour);
   font-family: "Montserrat", sans-serif;
   font-size: 12px;
   font-weight: 600;
@@ -402,13 +402,10 @@ nav ul li.active {
   margin-top: 60px;
 }
 
-[data-bs-theme="light"] .fc-unthemed td.fc-today {
-  opacity: 20%;
+.fc-unthemed td.fc-today {
+  opacity: 10%;
 }
 
-[data-bs-theme="dark"] .fc-unthemed td.fc-today {
-  opacity: 20%;
-}
 
 #page-blog {
   height: calc(100vh - var(--nav-height));
@@ -424,16 +421,19 @@ nav ul li.active {
 .fc-toolbar h2 {
   font-size: clamp(13px, 4vw, 16px);
   font-weight: 700;
-  color: var(--phone-colour);
+  color: var(--special-element-colour);
 }
-
+.fc-state-default{
+  text-shadow: none !important;
+}
 .fc-button {
-  background-color: var(--phone-colour) !important;
-  border-color: var(--phone-colour) !important;
+  background-color: var(--nav-bg) !important;
+  /* border-color: var(--special-element-colour) !important; */
   font-family: "Montserrat", sans-serif !important;
   font-size: 11px !important;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  color: var(--special-element-colour);
 }
 
 .fc-button:hover {
@@ -442,8 +442,8 @@ nav ul li.active {
 }
 
 .fc-event {
-  border-color: var(--phone-colour) !important;
-  color: var(--phone-colour) !important;
+  /* border-color: var(--special-element-colour) !important; */
+  /* color: var(--text) !important; */
   font-size: 11px;
   font-weight: 700;
 }
@@ -458,7 +458,7 @@ nav ul li.active {
 .settings-section-title {
   font-size: clamp(13px, 3.5vw, 15px);
   font-weight: 700;
-  color: var(--phone-colour);
+  color: var(--special-element-colour);
   margin-bottom: 6px;
   letter-spacing: 0.04em;
 }
@@ -501,7 +501,7 @@ nav ul li.active {
 .activity-setting-name {
   font-size: clamp(13px, 3.5vw, 14px);
   font-weight: 600;
-  color: var(--phone-colour);
+  color: var(--special-element-colour);
 }
 
 .recurring-row {
@@ -514,7 +514,7 @@ nav ul li.active {
 }
 
 .recurring-icon {
-  color: var(--phone-colour);
+  color: var(--special-element-colour);
   font-size: 11px;
 }
 
@@ -531,7 +531,7 @@ nav ul li.active {
   border: 1px solid #e0e0e0;
   border-radius: 6px;
   padding: 4px 8px;
-  color: var(--phone-colour);
+  color: var(--special-element-colour);
 
 }
 
@@ -626,14 +626,14 @@ nav ul li.active {
 }
 
 .sleep-btn--manual-unselected {
-  background: var(--card-bg);
-  color: var(--phone-colour);
-  border: 2px solid var(--card-border);
+  background: var(--button-bg);
+  color: var(--special-element-colour);
+  border: 2px solid var(--button-border);
 }
 
 .sleep-btn--manual-selected {
-  background: var(--card-bg);
-  color: var(--phone-colour);
+  background: var(--button-bg);
+  color: var(--special-element-colour);
   border: 2px solid var(--accent-colour);
 }
 
@@ -654,7 +654,7 @@ nav ul li.active {
 .quality-confirm-btn {
   display: inline-block;
   margin-top: 10px;
-  background: var(--phone-colour);
+  background: var(--special-element-colour);
   color: var(--accent-colour);
   border: 2px solid var(--accent-colour);
   border-radius: 20px;
@@ -699,7 +699,7 @@ nav ul li.active {
 .edit-modal-title {
   font-size: 16px;
   font-weight: 700;
-  color: var(--phone-colour);
+  color: var(--special-element-colour);
   letter-spacing: 0.04em;
   margin: 0 0 16px;
   text-align: center;
